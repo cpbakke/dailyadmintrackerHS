@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Daily Admin Dashboard — Mockups</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F5F6F3;
+    --surface:#FFFFFF;
+    --ink:#1B2A38;
+    --ink-soft:#5C6C7C;
+    --line:#DFE3E7;
+    --brand:#1F4B5F;
+    --brand-soft:#EAF0F1;
+    --accent:#B98A3E;
+    --radius:10px;
+  }
+  *{ box-sizing:border-box; }
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'IBM Plex Sans', system-ui, sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2{ font-family:'Source Serif 4', Georgia, serif; font-weight:600; margin:0; }
+
+  .masthead{
+    background:var(--brand);
+    color:#fff;
+    padding:40px 32px;
+    text-align:center;
+  }
+  .masthead .district{ font-size:13px; letter-spacing:.04em; color:#BFD3D9; margin-bottom:8px; text-transform:uppercase; }
+  .masthead h1{ font-size:30px; color:#fff; }
+  .masthead p{ color:#CFE0E4; font-size:14.5px; margin-top:10px; max-width:520px; margin-left:auto; margin-right:auto; }
+
+  main{ max-width:900px; margin:0 auto; padding:40px 24px 60px; }
+
+  .cards{ display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+  .card{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:26px;
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+  }
+  .card .tag{
+    display:inline-block;
+    font-size:11px;
+    font-weight:600;
+    letter-spacing:.03em;
+    color:var(--brand);
+    background:var(--brand-soft);
+    padding:3px 10px;
+    border-radius:20px;
+    width:fit-content;
+  }
+  .card h2{ font-size:19px; }
+  .card p{ font-size:13.5px; color:var(--ink-soft); line-height:1.5; margin:0; }
+  .card ul{ margin:0; padding-left:18px; font-size:13px; color:var(--ink-soft); line-height:1.6; }
+  .card a.btn{
+    margin-top:auto;
+    display:inline-block;
+    text-align:center;
+    background:var(--brand);
+    color:#fff;
+    text-decoration:none;
+    font-size:13.5px;
+    font-weight:600;
+    padding:10px 18px;
+    border-radius:8px;
+  }
+  .card a.btn:hover{ background:#173A48; }
+
+  .footnote{
+    margin-top:36px;
+    font-size:12.5px;
+    color:var(--ink-soft);
+    line-height:1.6;
+    border-top:1px solid var(--line);
+    padding-top:18px;
+  }
+
+  @media (max-width:700px){
+    .cards{ grid-template-columns:1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="masthead">
+  <div class="district">Aurora Public Schools</div>
+  <h1>Daily Admin Dashboard — Mockups</h1>
+  <p>Interactive concept mockups for a daily dashboard built for building admin teams, ahead of the real Tableau build.</p>
+</div>
+
+<main>
+  <div class="cards">
+    <div class="card">
+      <span class="tag">Middle school</span>
+      <h2>Middle School Dashboard</h2>
+      <p>Attendance, academics, behavior &amp; safety, staffing, and coaching — plus a school-wide Needs Attention list.</p>
+      <ul>
+        <li>Grade-grouped chronic absenteeism and failing-classes lists</li>
+        <li>Behavior/safety plan tracking</li>
+        <li>Coaching &amp; development next steps</li>
+      </ul>
+      <a class="btn" href="aps_admin_dashboard_mockup.html">View mockup →</a>
+    </div>
+
+    <div class="card">
+      <span class="tag">High school</span>
+      <h2>High School Dashboard</h2>
+      <p>Everything in the middle school version, plus a dedicated On Track to Graduate tab for seniors.</p>
+      <ul>
+        <li>Percent on-track by credits, Menu of Options, and overall</li>
+        <li>Off-track lists by credit deficiency and Menu of Options (English/Math)</li>
+        <li>Early-warning list of seniors currently failing a class</li>
+      </ul>
+      <a class="btn" href="aps_high_school_dashboard_mockup.html">View mockup →</a>
+    </div>
+  </div>
+
+  <div class="footnote">
+    All student names and data shown in these mockups are entirely fictional, for demonstration purposes only. This is a concept mockup, not a production tool — no real student data should be entered here. See the accompanying data &amp; access brief for notes on data sources, refresh cadence, and access tiers for the real Tableau build.
+  </div>
+</main>
+
+</body>
+</html>
