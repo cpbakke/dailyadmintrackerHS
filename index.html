@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Daily Admin Dashboard — Mockups</title>
+<title>Daily Admin Dashboard — High School Mockup</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -12,13 +12,22 @@
     --surface:#FFFFFF;
     --ink:#1B2A38;
     --ink-soft:#5C6C7C;
+    --ink-faint:#8B98A5;
     --line:#DFE3E7;
     --brand:#1F4B5F;
     --brand-soft:#EAF0F1;
     --accent:#B98A3E;
+    --good:#3F7D58;
+    --good-bg:#EAF3EC;
+    --watch:#B4720F;
+    --watch-bg:#FBF1DF;
+    --urgent:#B4423F;
+    --urgent-bg:#FBEBEA;
+    --info:#3E6E8E;
+    --info-bg:#E9F1F5;
     --radius:10px;
   }
-  *{ box-sizing:border-box; }
+  *{box-sizing:border-box;}
   body{
     margin:0;
     background:var(--bg);
@@ -26,111 +35,640 @@
     font-family:'IBM Plex Sans', system-ui, sans-serif;
     -webkit-font-smoothing:antialiased;
   }
-  h1,h2{ font-family:'Source Serif 4', Georgia, serif; font-weight:600; margin:0; }
+  h1,h2,h3{ font-family:'Source Serif 4', Georgia, serif; font-weight:600; margin:0; }
 
   .masthead{
-    background:var(--brand);
-    color:#fff;
-    padding:40px 32px;
-    text-align:center;
+    background:var(--brand); color:#fff; padding:18px 32px;
+    display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;
   }
-  .masthead .district{ font-size:13px; letter-spacing:.04em; color:#BFD3D9; margin-bottom:8px; text-transform:uppercase; }
-  .masthead h1{ font-size:30px; color:#fff; }
-  .masthead p{ color:#CFE0E4; font-size:14.5px; margin-top:10px; max-width:520px; margin-left:auto; margin-right:auto; }
+  .masthead .district{ font-size:13px; letter-spacing:.02em; color:#BFD3D9; margin-bottom:2px; }
+  .masthead h1{ font-size:22px; color:#fff; }
+  .masthead .meta{ text-align:right; font-size:13px; color:#CFE0E4; line-height:1.5; }
+  .masthead select{
+    background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.3); color:#fff;
+    border-radius:6px; padding:4px 8px; font-size:13px; font-family:inherit;
+  }
+  .masthead select option{ color:#1B2A38; }
 
-  main{ max-width:900px; margin:0 auto; padding:40px 24px 60px; }
+  .kpi-strip{
+    display:grid; grid-template-columns:repeat(7,1fr); gap:1px;
+    background:var(--line); border-bottom:1px solid var(--line);
+  }
+  .kpi{ background:var(--surface); padding:16px 16px; display:flex; flex-direction:column; gap:4px; }
+  .kpi .label{ font-size:11.5px; color:var(--ink-soft); font-weight:500; }
+  .kpi .value{ font-size:24px; font-weight:700; line-height:1; }
+  .kpi .delta{ font-size:11.5px; font-weight:500; }
+  .kpi .delta.good{ color:var(--good); }
+  .kpi .delta.watch{ color:var(--watch); }
+  .kpi .delta.urgent{ color:var(--urgent); }
+  .kpi.flagged .value{ color:var(--urgent); }
 
-  .cards{ display:grid; grid-template-columns:1fr 1fr; gap:20px; }
-  .card{
-    background:var(--surface);
-    border:1px solid var(--line);
-    border-radius:var(--radius);
-    padding:26px;
-    display:flex;
-    flex-direction:column;
-    gap:12px;
+  .tabbar{
+    display:flex; gap:4px; padding:0 32px; background:var(--surface);
+    border-bottom:1px solid var(--line); overflow-x:auto;
   }
-  .card .tag{
-    display:inline-block;
-    font-size:11px;
-    font-weight:600;
-    letter-spacing:.03em;
-    color:var(--brand);
-    background:var(--brand-soft);
-    padding:3px 10px;
-    border-radius:20px;
-    width:fit-content;
+  .tab{
+    border:none; background:none; font-family:inherit; font-size:14px; font-weight:600;
+    color:var(--ink-soft); padding:14px 14px 12px; cursor:pointer;
+    border-bottom:3px solid transparent; white-space:nowrap;
   }
-  .card h2{ font-size:19px; }
-  .card p{ font-size:13.5px; color:var(--ink-soft); line-height:1.5; margin:0; }
-  .card ul{ margin:0; padding-left:18px; font-size:13px; color:var(--ink-soft); line-height:1.6; }
-  .card a.btn{
-    margin-top:auto;
-    display:inline-block;
-    text-align:center;
-    background:var(--brand);
-    color:#fff;
-    text-decoration:none;
-    font-size:13.5px;
-    font-weight:600;
-    padding:10px 18px;
-    border-radius:8px;
-  }
-  .card a.btn:hover{ background:#173A48; }
-
-  .footnote{
-    margin-top:36px;
-    font-size:12.5px;
-    color:var(--ink-soft);
-    line-height:1.6;
-    border-top:1px solid var(--line);
-    padding-top:18px;
+  .tab.active{ color:var(--ink); border-bottom-color:var(--accent); }
+  .tab .count{
+    display:inline-block; margin-left:6px; background:var(--urgent-bg); color:var(--urgent);
+    font-size:11px; font-weight:700; padding:1px 7px; border-radius:20px;
   }
 
-  @media (max-width:700px){
-    .cards{ grid-template-columns:1fr; }
+  main{ padding:24px 32px 60px; max-width:1400px; margin:0 auto; }
+  .panel{ display:none; }
+  .panel.active{ display:block; }
+
+  .section-title{ font-size:16px; margin-bottom:12px; display:flex; align-items:center; justify-content:space-between; }
+  .section-title span.hint{ font-family:'IBM Plex Sans',sans-serif; font-weight:400; font-size:12.5px; color:var(--ink-faint); }
+
+  .grid-2{ display:grid; grid-template-columns:1.4fr 1fr; gap:18px; margin-bottom:24px; }
+  .grid-3{ display:grid; grid-template-columns:repeat(3,1fr); gap:18px; margin-bottom:24px; }
+
+  .card{ background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); padding:18px 20px; }
+  .card h3{ font-size:14.5px; margin-bottom:12px; }
+
+  table{ width:100%; border-collapse:collapse; font-size:13.5px; }
+  th{ text-align:left; color:var(--ink-soft); font-weight:600; font-size:12px; padding:6px 8px; border-bottom:1px solid var(--line); }
+  td{ padding:8px; border-bottom:1px solid var(--line); }
+  tr:last-child td{ border-bottom:none; }
+  .group-row td{
+    background:var(--brand-soft); font-weight:700; color:var(--brand); font-size:12px;
+    letter-spacing:.01em; border-bottom:1px solid var(--line);
+  }
+
+  .bar-row{ display:flex; align-items:center; gap:10px; margin-bottom:10px; font-size:13px; }
+  .bar-row .lbl{ width:76px; color:var(--ink-soft); flex-shrink:0; }
+  .bar-track{ flex:1; background:var(--brand-soft); border-radius:5px; height:10px; overflow:hidden; }
+  .bar-fill{ height:100%; background:var(--brand); border-radius:5px; }
+  .bar-fill.watch{ background:var(--watch); }
+  .bar-fill.urgent{ background:var(--urgent); }
+  .bar-val{ width:40px; text-align:right; font-weight:600; font-size:12.5px; }
+
+  .pill{ display:inline-block; font-size:11px; font-weight:600; padding:2px 9px; border-radius:20px; }
+  .pill.good{ background:var(--good-bg); color:var(--good); }
+  .pill.watch{ background:var(--watch-bg); color:var(--watch); }
+  .pill.urgent{ background:var(--urgent-bg); color:var(--urgent); }
+  .pill.info{ background:var(--info-bg); color:var(--info); }
+
+  .event-row{ display:flex; gap:12px; padding:9px 0; border-bottom:1px solid var(--line); font-size:13.5px; }
+  .event-row:last-child{ border-bottom:none; }
+  .event-time{ width:64px; flex-shrink:0; color:var(--ink-soft); font-weight:600; font-size:12.5px; }
+
+  .filter-bar{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:18px; }
+  .chip{
+    border:1px solid var(--line); background:var(--surface); border-radius:20px; padding:6px 13px;
+    font-size:12.5px; font-weight:600; cursor:pointer; color:var(--ink-soft);
+    display:flex; align-items:center; gap:6px;
+  }
+  .chip.on{ background:var(--brand); border-color:var(--brand); color:#fff; }
+  .chip .dot{ width:8px; height:8px; border-radius:50%; }
+
+  .student-list{ display:flex; flex-direction:column; gap:10px; }
+  .student-card{ background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); overflow:hidden; }
+  .student-head{ display:flex; align-items:center; justify-content:space-between; padding:14px 18px; cursor:pointer; gap:14px; }
+  .student-id{ display:flex; align-items:center; gap:12px; min-width:220px; }
+  .student-id .name{ font-weight:700; font-size:14.5px; }
+  .student-id .meta{ font-size:12px; color:var(--ink-soft); }
+  .student-flags{ display:flex; flex-wrap:wrap; gap:6px; flex:1; }
+  .chev{ color:var(--ink-faint); font-size:13px; transition:transform .15s ease; flex-shrink:0; }
+  .student-card.open .chev{ transform:rotate(90deg); }
+  .student-detail{ display:none; padding:0 18px 16px 18px; border-top:1px solid var(--line); font-size:13px; color:var(--ink-soft); }
+  .student-card.open .student-detail{ display:block; padding-top:14px; }
+  .detail-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+  .detail-item .k{ font-size:11px; text-transform:uppercase; letter-spacing:.03em; color:var(--ink-faint); margin-bottom:2px; }
+  .detail-item .v{ font-size:13.5px; color:var(--ink); font-weight:500; }
+  .detail-note{ margin-top:12px; padding-top:12px; border-top:1px dashed var(--line); }
+
+  .plan-card + .plan-card{ margin-top:10px; }
+
+  .footnote{ margin-top:28px; font-size:12px; color:var(--ink-faint); border-top:1px solid var(--line); padding-top:14px; line-height:1.6; }
+
+  @media (max-width:1000px){
+    .kpi-strip{ grid-template-columns:repeat(3,1fr); }
+    .grid-2, .grid-3{ grid-template-columns:1fr; }
+    .detail-grid{ grid-template-columns:1fr; }
   }
 </style>
 </head>
 <body>
 
 <div class="masthead">
-  <div class="district">Aurora Public Schools</div>
-  <h1>Daily Admin Dashboard — Mockups</h1>
-  <p>Interactive concept mockups for a daily dashboard built for building admin teams, ahead of the real Tableau build.</p>
+  <div>
+    <div class="district">Aurora Public Schools</div>
+    <h1>Daily Admin Dashboard</h1>
+  </div>
+  <div style="display:flex; align-items:center; gap:16px;">
+    <select><option>Vista Ridge High School</option></select>
+    <div class="meta">Tuesday, September 8, 2026<br>Last refreshed 7:12 AM</div>
+  </div>
+</div>
+
+<div class="kpi-strip">
+  <div class="kpi">
+    <div class="label">Attendance today</div>
+    <div class="value">89.7%</div>
+    <div class="delta watch">▼ 2.3 pts vs. target</div>
+  </div>
+  <div class="kpi">
+    <div class="label">Staff coverage</div>
+    <div class="value">8 out</div>
+    <div class="delta urgent">2 periods unfilled</div>
+  </div>
+  <div class="kpi">
+    <div class="label">Behavior incidents (7-day)</div>
+    <div class="value">19</div>
+    <div class="delta watch">— flat vs. last week</div>
+  </div>
+  <div class="kpi">
+    <div class="label">Health office visits</div>
+    <div class="value">13</div>
+    <div class="delta watch">▲ above weekly avg</div>
+  </div>
+  <div class="kpi">
+    <div class="label">Enrollment</div>
+    <div class="value">1,384</div>
+    <div class="delta good">+3 this week</div>
+  </div>
+  <div class="kpi flagged">
+    <div class="label">Students needing attention</div>
+    <div class="value">14</div>
+    <div class="delta urgent">3 new since yesterday</div>
+  </div>
+  <div class="kpi flagged">
+    <div class="label">Seniors off-track to graduate</div>
+    <div class="value">5</div>
+    <div class="delta urgent">1 new since last review</div>
+  </div>
+</div>
+
+<div class="tabbar" id="tabbar">
+  <button class="tab active" data-tab="overview">Overview</button>
+  <button class="tab" data-tab="attendance">Attendance</button>
+  <button class="tab" data-tab="academics">Academics</button>
+  <button class="tab" data-tab="behavior">Behavior &amp; Safety</button>
+  <button class="tab" data-tab="staff">Staff</button>
+  <button class="tab" data-tab="coaching">Coaching &amp; Development</button>
+  <button class="tab" data-tab="graduation">On Track to Graduate <span class="count">5</span></button>
+  <button class="tab" data-tab="attention">Needs Attention <span class="count">14</span></button>
 </div>
 
 <main>
-  <div class="cards">
-    <div class="card">
-      <span class="tag">Middle school</span>
-      <h2>Middle School Dashboard</h2>
-      <p>Attendance, academics, behavior &amp; safety, staffing, and coaching — plus a school-wide Needs Attention list.</p>
-      <ul>
-        <li>Grade-grouped chronic absenteeism and failing-classes lists</li>
-        <li>Behavior/safety plan tracking</li>
-        <li>Coaching &amp; development next steps</li>
-      </ul>
-      <a class="btn" href="aps_admin_dashboard_mockup.html">View mockup →</a>
+
+  <!-- OVERVIEW -->
+  <section class="panel active" id="overview">
+    <div class="grid-2">
+      <div class="card">
+        <h3>Today at a glance</h3>
+        <div class="event-row"><div class="event-time">7:20a</div><div>Late bus notice — Routes 6 &amp; 9, approx. 10–15 min</div></div>
+        <div class="event-row"><div class="event-time">8:30a</div><div>College &amp; career fair setup, main gym</div></div>
+        <div class="event-row"><div class="event-time">9:30a</div><div>504 review meeting — Counseling Suite, Rm 2</div></div>
+        <div class="event-row"><div class="event-time">11:00a</div><div>Senior credit-check meetings begin, Counseling Suite</div></div>
+        <div class="event-row"><div class="event-time">1:15p</div><div>Fire drill, scheduled</div></div>
+        <div class="event-row"><div class="event-time">3:30p</div><div>After-school detention, Rm 118 — 6 students</div></div>
+      </div>
+      <div class="card">
+        <h3>Needs-attention breakdown</h3>
+        <div class="bar-row"><div class="lbl">Chronic abs.</div><div class="bar-track"><div class="bar-fill watch" style="width:60%"></div></div><div class="bar-val">5</div></div>
+        <div class="bar-row"><div class="lbl">Failing 2+</div><div class="bar-track"><div class="bar-fill urgent" style="width:50%"></div></div><div class="bar-val">4</div></div>
+        <div class="bar-row"><div class="lbl">Return-suspd.</div><div class="bar-track"><div class="bar-fill" style="width:20%"></div></div><div class="bar-val">1</div></div>
+        <div class="bar-row"><div class="lbl">New detention</div><div class="bar-track"><div class="bar-fill" style="width:30%"></div></div><div class="bar-val">2</div></div>
+        <div class="bar-row"><div class="lbl">Referrals x3+</div><div class="bar-track"><div class="bar-fill urgent" style="width:20%"></div></div><div class="bar-val">1</div></div>
+        <div class="bar-row"><div class="lbl">Off-track grad (12th)</div><div class="bar-track"><div class="bar-fill urgent" style="width:36%"></div></div><div class="bar-val">5</div></div>
+      </div>
+    </div>
+    <div class="grid-3">
+      <div class="card"><h3>Attendance trend, 4 wks</h3><div style="font-size:13px;color:var(--ink-soft);">93% → 92% → 91% → 90%<br>Seniors trending lowest of all grades.</div></div>
+      <div class="card"><h3>Staffing snapshot</h3><div style="font-size:13px;color:var(--ink-soft);">8 teachers out · 6 subs placed · 2 gaps (2nd period Chem, 5th period US Hist) · dept. chairs covering</div></div>
+      <div class="card"><h3>Safety note</h3><div style="font-size:13px;color:var(--ink-soft);">No active safety concerns. Parking lot camera 4 flagged for maintenance.</div></div>
     </div>
 
     <div class="card">
-      <span class="tag">High school</span>
-      <h2>High School Dashboard</h2>
-      <p>Everything in the middle school version, plus a dedicated On Track to Graduate tab for seniors.</p>
-      <ul>
-        <li>Percent on-track by credits, Menu of Options, and overall</li>
-        <li>Off-track lists by credit deficiency and Menu of Options (English/Math)</li>
-        <li>Early-warning list of seniors currently failing a class</li>
-      </ul>
-      <a class="btn" href="aps_high_school_dashboard_mockup.html">View mockup →</a>
+      <h3>Week at a glance — Sept 8–12</h3>
+      <div class="event-row"><div class="event-time">Tue</div><div><span class="pill good">Event</span>&nbsp; College &amp; career fair, main gym, all day</div></div>
+      <div class="event-row"><div class="event-time">Wed</div><div><span class="pill info">Testing</span>&nbsp; PSAT/SAT school-day testing, juniors &amp; seniors — periods 1–3</div></div>
+      <div class="event-row"><div class="event-time">Thu</div><div><span class="pill watch">Field trip</span>&nbsp; AP Environmental Science — water treatment plant, permission slips due Tue</div></div>
+      <div class="event-row"><div class="event-time">Fri</div><div><span class="pill urgent">Drill</span>&nbsp; Lockdown drill, scheduled, all periods — district requirement</div></div>
     </div>
-  </div>
+  </section>
 
-  <div class="footnote">
-    All student names and data shown in these mockups are entirely fictional, for demonstration purposes only. This is a concept mockup, not a production tool — no real student data should be entered here. See the accompanying data &amp; access brief for notes on data sources, refresh cadence, and access tiers for the real Tableau build.
-  </div>
+  <!-- ATTENDANCE -->
+  <section class="panel" id="attendance">
+    <div class="grid-2">
+      <div class="card">
+        <h3>Attendance rate by grade — today</h3>
+        <div class="bar-row"><div class="lbl">9th grade</div><div class="bar-track"><div class="bar-fill" style="width:92%"></div></div><div class="bar-val">92%</div></div>
+        <div class="bar-row"><div class="lbl">10th grade</div><div class="bar-track"><div class="bar-fill watch" style="width:90%"></div></div><div class="bar-val">90%</div></div>
+        <div class="bar-row"><div class="lbl">11th grade</div><div class="bar-track"><div class="bar-fill watch" style="width:89%"></div></div><div class="bar-val">89%</div></div>
+        <div class="bar-row"><div class="lbl">12th grade</div><div class="bar-track"><div class="bar-fill urgent" style="width:87%"></div></div><div class="bar-val">87%</div></div>
+      </div>
+      <div class="card">
+        <h3>Chronic absenteeism trend</h3>
+        <p style="font-size:13px;color:var(--ink-soft);">Students below 90% attendance over rolling 30 days.</p>
+        <div style="font-size:26px;font-weight:700;">61 <span style="font-size:13px;font-weight:500;color:var(--ink-soft);">students (4.4% of school)</span></div>
+      </div>
+    </div>
+    <div class="card" style="margin-bottom:24px;">
+      <h3>Tardies by grade — today</h3>
+      <table>
+        <tr><th>Grade</th><th>Tardies</th><th>Most common period</th></tr>
+        <tr><td>9th grade</td><td>12</td><td>1st period</td></tr>
+        <tr><td>10th grade</td><td>17</td><td>after lunch</td></tr>
+        <tr><td>11th grade</td><td>14</td><td>1st period</td></tr>
+        <tr><td>12th grade</td><td>21</td><td>1st period (open-campus lunch return)</td></tr>
+      </table>
+    </div>
+
+    <div class="card">
+      <h3>Needs-attention list — chronic absenteeism, by grade</h3>
+      <table>
+        <tr><th>Student</th><th>Counselor</th><th>Attendance (30-day)</th><th>Days absent</th><th>Note</th></tr>
+        <tr class="group-row"><td colspan="5">9th grade</td></tr>
+        <tr><td>Elias Nakamura</td><td>Ms. Whitcombe</td><td>86%</td><td>8</td><td>New to district, adjusting to schedule</td></tr>
+        <tr><td>Ava Whitfield</td><td>Ms. Whitcombe</td><td>88%</td><td>7</td><td>Attendance letter sent home</td></tr>
+        <tr><td>Marcus Delgado</td><td>Ms. Whitcombe</td><td>84%</td><td>9</td><td>Chronic illness documentation pending</td></tr>
+        <tr><td>Sophie Tran</td><td>Ms. Whitcombe</td><td>87%</td><td>8</td><td>Family engagement meeting scheduled</td></tr>
+        <tr><td>Noah Kimura</td><td>Ms. Whitcombe</td><td>83%</td><td>10</td><td>Attendance improvement plan started</td></tr>
+        <tr class="group-row"><td colspan="5">10th grade</td></tr>
+        <tr><td>Grace Lindqvist</td><td>Mr. Kim</td><td>69%</td><td>19</td><td>Truancy mediation meeting scheduled Thu</td></tr>
+        <tr><td>Diego Fontaine</td><td>Mr. Kim</td><td>85%</td><td>8</td><td>Attendance letter sent home</td></tr>
+        <tr><td>Layla Osei</td><td>Mr. Kim</td><td>82%</td><td>9</td><td>Family conference held last week</td></tr>
+        <tr><td>Ryder Ashworth</td><td>Mr. Kim</td><td>86%</td><td>7</td><td>Monitoring after transportation issue resolved</td></tr>
+        <tr><td>Mia Castellano</td><td>Mr. Kim</td><td>80%</td><td>11</td><td>Attendance contract signed</td></tr>
+        <tr class="group-row"><td colspan="5">11th grade</td></tr>
+        <tr><td>Bianca Souza</td><td>Ms. Alvarado</td><td>82%</td><td>13</td><td>Attendance contract in place with family</td></tr>
+        <tr><td>Xavier Boone</td><td>Ms. Alvarado</td><td>85%</td><td>9</td><td>Attendance letter sent home</td></tr>
+        <tr><td>Harper Nwosu</td><td>Ms. Alvarado</td><td>83%</td><td>10</td><td>Family engagement meeting scheduled</td></tr>
+        <tr><td>Owen Petrakis</td><td>Ms. Alvarado</td><td>87%</td><td>8</td><td>Chronic illness documentation pending</td></tr>
+        <tr><td>Zara Whitcomb</td><td>Ms. Alvarado</td><td>81%</td><td>12</td><td>Truancy referral submitted</td></tr>
+        <tr class="group-row"><td colspan="5">12th grade</td></tr>
+        <tr><td>Maddox Hale</td><td>Mr. Okonjo</td><td>84%</td><td>12</td><td>At risk of losing credit in 2 courses</td></tr>
+        <tr><td>Isabela Cruz</td><td>Mr. Okonjo</td><td>86%</td><td>8</td><td>Attendance letter sent home</td></tr>
+        <tr><td>Julian Ferreira</td><td>Mr. Okonjo</td><td>83%</td><td>10</td><td>Senior credit-check flagged</td></tr>
+        <tr><td>Ruby Solano</td><td>Mr. Okonjo</td><td>88%</td><td>7</td><td>Improved past 2 weeks, continued monitoring</td></tr>
+        <tr><td>Malik Toussaint</td><td>Mr. Okonjo</td><td>81%</td><td>11</td><td>Attendance contract in place</td></tr>
+      </table>
+    </div>
+  </section>
+
+  <!-- ACADEMICS -->
+  <section class="panel" id="academics">
+    <div class="grid-2">
+      <div class="card">
+        <h3>Students failing 2+ classes, by grade</h3>
+        <div class="bar-row"><div class="lbl">9th grade</div><div class="bar-track"><div class="bar-fill" style="width:22%"></div></div><div class="bar-val">18</div></div>
+        <div class="bar-row"><div class="lbl">10th grade</div><div class="bar-track"><div class="bar-fill watch" style="width:30%"></div></div><div class="bar-val">24</div></div>
+        <div class="bar-row"><div class="lbl">11th grade</div><div class="bar-track"><div class="bar-fill watch" style="width:28%"></div></div><div class="bar-val">22</div></div>
+        <div class="bar-row"><div class="lbl">12th grade</div><div class="bar-track"><div class="bar-fill urgent" style="width:34%"></div></div><div class="bar-val">27</div></div>
+      </div>
+      <div class="card">
+        <h3>Benchmark snapshot (interim 1)</h3>
+        <p style="font-size:13px;color:var(--ink-soft);">% of students meeting grade-level benchmark, ELA / Math</p>
+        <div style="font-size:13px;">ELA: <strong>64%</strong> &nbsp;·&nbsp; Math: <strong>57%</strong></div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:24px;">
+      <h3>Grade-drop watch</h3>
+      <p style="font-size:13px;color:var(--ink-soft);">Students whose GPA or attendance dropped noticeably since last check-in — see Needs Attention tab for individual detail.</p>
+    </div>
+
+    <div class="card">
+      <h3>Needs-attention list — failing 2+ classes, by grade</h3>
+      <table>
+        <tr><th>Student</th><th>Classes failing (this week)</th><th>Last week</th><th>2 weeks ago</th></tr>
+        <tr class="group-row"><td colspan="4">9th grade</td></tr>
+        <tr><td>Devin Okafor</td><td>2</td><td>2</td><td>1</td></tr>
+        <tr><td>Chloe Bergman</td><td>2</td><td>1</td><td>1</td></tr>
+        <tr><td>Andre Silva</td><td>3</td><td>2</td><td>2</td></tr>
+        <tr><td>Lily Hoffmann</td><td>2</td><td>2</td><td>2</td></tr>
+        <tr><td>Kaiden Brooks</td><td>2</td><td>1</td><td>0</td></tr>
+        <tr class="group-row"><td colspan="4">10th grade</td></tr>
+        <tr><td>Trevon Michaels</td><td>2</td><td>1</td><td>1</td></tr>
+        <tr><td>Nadia Rourke</td><td>2</td><td>2</td><td>1</td></tr>
+        <tr><td>Preston Vance</td><td>3</td><td>3</td><td>2</td></tr>
+        <tr><td>Ines Delacroix</td><td>2</td><td>1</td><td>1</td></tr>
+        <tr><td>Sawyer McAllister</td><td>2</td><td>2</td><td>2</td></tr>
+        <tr class="group-row"><td colspan="4">11th grade</td></tr>
+        <tr><td>Renata Alvez</td><td>2</td><td>2</td><td>1</td></tr>
+        <tr><td>Cassius Wren</td><td>3</td><td>2</td><td>2</td></tr>
+        <tr><td>Yasmin Farouk</td><td>2</td><td>1</td><td>1</td></tr>
+        <tr><td>Dominic Reyes</td><td>2</td><td>2</td><td>2</td></tr>
+        <tr><td>Willa Sandoval</td><td>2</td><td>1</td><td>1</td></tr>
+        <tr class="group-row"><td colspan="4">12th grade</td></tr>
+        <tr><td>Jamal Whitfield</td><td>3</td><td>2</td><td>2</td></tr>
+        <tr><td>Desmond Okoro</td><td>2</td><td>2</td><td>1</td></tr>
+        <tr><td>Fernanda Lopes</td><td>2</td><td>1</td><td>1</td></tr>
+        <tr><td>Tobias Kingsley</td><td>3</td><td>3</td><td>2</td></tr>
+        <tr><td>Selena Marchetti</td><td>2</td><td>2</td><td>1</td></tr>
+      </table>
+    </div>
+  </section>
+
+  <!-- BEHAVIOR & SAFETY -->
+  <section class="panel" id="behavior">
+    <div class="card" style="margin-bottom:24px;">
+      <h3>Students on behavior or safety plans</h3>
+      <p style="font-size:13px;color:var(--ink-soft);margin-bottom:12px;">What's required of admin, current cycle.</p>
+      <div class="plan-card" style="border:1px solid var(--line);border-radius:8px;padding:12px 14px;">
+        <div style="display:flex;justify-content:space-between;font-size:13.5px;font-weight:700;">Isaiah Cortez — 11th <span class="pill watch">Behavior plan</span></div>
+        <div style="font-size:13px;color:var(--ink-soft);margin-top:6px;">Admin: daily morning check-in through Sept 19; review incident log weekly with counselor. Next review: Sept 19.</div>
+      </div>
+      <div class="plan-card" style="border:1px solid var(--line);border-radius:8px;padding:12px 14px;">
+        <div style="display:flex;justify-content:space-between;font-size:13.5px;font-weight:700;">Marisol Diaz — 9th <span class="pill urgent">Safety plan</span></div>
+        <div style="font-size:13px;color:var(--ink-soft);margin-top:6px;">Admin: escorted hallway transitions between periods 2–4; notify all substitute teachers in advance. Next review: Sept 22.</div>
+      </div>
+      <div class="plan-card" style="border:1px solid var(--line);border-radius:8px;padding:12px 14px;">
+        <div style="display:flex;justify-content:space-between;font-size:13.5px;font-weight:700;">Xavier Boone — 11th <span class="pill watch">Behavior plan</span></div>
+        <div style="font-size:13px;color:var(--ink-soft);margin-top:6px;">Admin: daily lunch check-in; monitor cafeteria behavior log with lunch supervisor. Next review: Sept 25.</div>
+      </div>
+      <div class="plan-card" style="border:1px solid var(--line);border-radius:8px;padding:12px 14px;">
+        <div style="display:flex;justify-content:space-between;font-size:13.5px;font-weight:700;">Tyler Brennan — 12th <span class="pill watch">Behavior plan</span></div>
+        <div style="font-size:13px;color:var(--ink-soft);margin-top:6px;">Admin: weekly check-in with dean; review grades and attendance jointly with counselor. Next review: Sept 30.</div>
+      </div>
+      <div class="plan-card" style="border:1px solid var(--line);border-radius:8px;padding:12px 14px;">
+        <div style="display:flex;justify-content:space-between;font-size:13.5px;font-weight:700;">Nina Okonkwo — 9th <span class="pill watch">Behavior plan</span></div>
+        <div style="font-size:13px;color:var(--ink-soft);margin-top:6px;">Admin: daily first-period check-in; de-escalation plan on file with front office. Next review: Sept 20.</div>
+      </div>
+      <div class="plan-card" style="border:1px solid var(--line);border-radius:8px;padding:12px 14px;">
+        <div style="display:flex;justify-content:space-between;font-size:13.5px;font-weight:700;">Farrah Osei — 11th <span class="pill urgent">Safety plan</span></div>
+        <div style="font-size:13px;color:var(--ink-soft);margin-top:6px;">Admin: no unsupervised contact with a named peer group; monitor during passing periods. Next review: Sept 26.</div>
+      </div>
+      <div class="plan-card" style="border:1px solid var(--line);border-radius:8px;padding:12px 14px;">
+        <div style="display:flex;justify-content:space-between;font-size:13.5px;font-weight:700;">Cole Whitaker — 10th <span class="pill watch">Behavior plan</span></div>
+        <div style="font-size:13px;color:var(--ink-soft);margin-top:6px;">Admin: weekly progress note to counselor; positive behavior contract in place. Next review: Sept 23.</div>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <h3>Incidents by type, 7-day</h3>
+        <table>
+          <tr><th>Type</th><th>Count</th><th>Trend</th></tr>
+          <tr><td>Classroom disruption</td><td>7</td><td><span class="pill good">▼ down</span></td></tr>
+          <tr><td>Physical altercation</td><td>3</td><td><span class="pill watch">— flat</span></td></tr>
+          <tr><td>Vaping / substance</td><td>5</td><td><span class="pill urgent">▲ up</span></td></tr>
+          <tr><td>Disrespect / defiance</td><td>3</td><td><span class="pill good">▼ down</span></td></tr>
+          <tr><td>Other</td><td>1</td><td><span class="pill good">▼ down</span></td></tr>
+        </table>
+      </div>
+      <div class="card">
+        <h3>Today's returns &amp; assignments</h3>
+        <p style="font-size:13px;"><span class="pill info">Returning</span> 1 student returning from out-of-school suspension</p>
+        <p style="font-size:13px;"><span class="pill watch">Detention</span> 2 students newly assigned this week, 6 total in today's session</p>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:24px;">
+      <h3>Visitor log summary — today</h3>
+      <p style="font-size:13px;color:var(--ink-soft);">9 visitors signed in · 1 district staff · 3 parent conferences · 4 college/career fair vendors</p>
+    </div>
+
+    <div class="card" style="margin-bottom:24px;">
+      <h3>Needs-attention list — behavior &amp; safety</h3>
+      <table>
+        <tr><th>Student</th><th>Category</th><th>Detail</th></tr>
+        <tr class="group-row"><td colspan="3">9th grade</td></tr>
+        <tr><td>Tariq Jefferson</td><td><span class="pill watch">New detention</span></td><td>Assigned for repeated dress-code violations, 2nd offense</td></tr>
+        <tr><td>Nina Okonkwo</td><td><span class="pill urgent">Multiple referrals</span></td><td>3 referrals in 2 weeks for classroom disruption</td></tr>
+        <tr><td>Caleb Whitmore</td><td><span class="pill info">Returning from suspension</span></td><td>Re-entry conference completed this AM</td></tr>
+        <tr><td>Della Fitzgerald</td><td><span class="pill watch">New detention</span></td><td>Assigned for phone-policy violation, 2nd time</td></tr>
+        <tr><td>Simon Achterberg</td><td><span class="pill urgent">Multiple referrals</span></td><td>Repeated tardy-related referrals this month</td></tr>
+        <tr class="group-row"><td colspan="3">10th grade</td></tr>
+        <tr><td>Nate Fielding</td><td><span class="pill watch">New detention</span></td><td>Assigned today for repeated tardiness</td></tr>
+        <tr><td>Priyanka Bose</td><td><span class="pill urgent">Multiple referrals</span></td><td>Hallway conflicts, 3 referrals in 10 days</td></tr>
+        <tr><td>Jaxon Delacroix</td><td><span class="pill info">Returning from suspension</span></td><td>Re-entry conference completed this AM</td></tr>
+        <tr><td>Miriam Solis</td><td><span class="pill watch">New detention</span></td><td>Assigned for dress-code violation</td></tr>
+        <tr><td>Cole Whitaker</td><td><span class="pill urgent">Multiple referrals</span></td><td>Repeated classroom disruption, 3 in 2 weeks</td></tr>
+        <tr class="group-row"><td colspan="3">11th grade</td></tr>
+        <tr><td>Isaiah Cortez</td><td><span class="pill info">Returning from suspension</span></td><td>Re-entry conference completed this AM</td></tr>
+        <tr><td>Beatriz Andrade</td><td><span class="pill urgent">Multiple referrals</span></td><td>Repeated disrespect incidents, 3 in 2 weeks</td></tr>
+        <tr><td>Grant Whitfield</td><td><span class="pill watch">New detention</span></td><td>Assigned for vaping violation, first offense</td></tr>
+        <tr><td>Farrah Osei</td><td><span class="pill urgent">Multiple referrals</span></td><td>Hallway altercation warning plus 2 prior referrals</td></tr>
+        <tr><td>Julian Petrov</td><td><span class="pill info">Returning from suspension</span></td><td>Re-entry conference scheduled this week</td></tr>
+        <tr class="group-row"><td colspan="3">12th grade</td></tr>
+        <tr><td>Camille Ortiz</td><td><span class="pill urgent">Multiple referrals</span></td><td>3 referrals in 2 weeks; team meeting requested</td></tr>
+        <tr><td>Xander Reyes</td><td><span class="pill watch">New detention</span></td><td>Assigned for vaping violation</td></tr>
+        <tr><td>Odalys Marín</td><td><span class="pill info">Returning from suspension</span></td><td>Re-entry conference completed this AM</td></tr>
+        <tr><td>Preston Doyle</td><td><span class="pill urgent">Multiple referrals</span></td><td>Repeated classroom disruption, 3 in 2 weeks</td></tr>
+        <tr><td>Vivian Achebe</td><td><span class="pill watch">New detention</span></td><td>Assigned for repeated dress-code violations</td></tr>
+      </table>
+    </div>
+
+  </section>
+
+  <!-- STAFF -->
+  <section class="panel" id="staff">
+    <div class="card" style="margin-bottom:18px;">
+      <h3>Coverage board — today</h3>
+      <table>
+        <tr><th>Teacher</th><th>Reason</th><th>Coverage</th></tr>
+        <tr><td>D. Reyes (Chemistry)</td><td>Sick</td><td><span class="pill urgent">Gap — 2nd period</span></td></tr>
+        <tr><td>P. Hartley (US History)</td><td>Conference</td><td><span class="pill urgent">Gap — 5th period</span></td></tr>
+        <tr><td>L. Bostwick (English 11)</td><td>Sick</td><td><span class="pill good">Sub placed</span></td></tr>
+        <tr><td>A. Feld (Algebra II)</td><td>Personal</td><td><span class="pill good">Sub placed</span></td></tr>
+        <tr><td>C. Mbeki (Spanish III)</td><td>Sick</td><td><span class="pill good">Sub placed</span></td></tr>
+        <tr><td>G. Ostrowski (Counselor)</td><td>Jury duty</td><td><span class="pill good">Coverage arranged</span></td></tr>
+      </table>
+    </div>
+    <div class="card">
+      <h3>Fill rate, this week</h3>
+      <div class="bar-row"><div class="lbl">Mon</div><div class="bar-track"><div class="bar-fill" style="width:100%"></div></div><div class="bar-val">100%</div></div>
+      <div class="bar-row"><div class="lbl">Tue</div><div class="bar-track"><div class="bar-fill watch" style="width:75%"></div></div><div class="bar-val">75%</div></div>
+    </div>
+  </section>
+
+  <!-- COACHING & DEVELOPMENT -->
+  <section class="panel" id="coaching">
+    <div class="section-title">Coaching &amp; development <span class="hint">Next steps from each teacher's most recent observation cycle</span></div>
+    <div class="card">
+      <table>
+        <tr><th>Teacher</th><th>Last observation</th><th>Focus area</th><th>Next steps assigned</th><th>Follow-up due</th><th>Status</th></tr>
+        <tr><td>D. Reyes</td><td>Aug 27</td><td>Lab safety &amp; pacing</td><td>Build a written lab-transition routine to reduce lost time</td><td>Sept 15</td><td><span class="pill watch">In progress</span></td></tr>
+        <tr><td>P. Hartley</td><td>Sept 1</td><td>Student discourse</td><td>Use structured discussion protocol at least 2x/week</td><td>Sept 16</td><td><span class="pill watch">In progress</span></td></tr>
+        <tr><td>L. Bostwick</td><td>Aug 22</td><td>Differentiated reading support</td><td>Introduce tiered text sets for independent reading blocks</td><td>Sept 10</td><td><span class="pill good">Complete</span></td></tr>
+        <tr><td>A. Feld</td><td>Sept 3</td><td>Formative assessment</td><td>Use exit tickets to check understanding before assigning homework</td><td>Sept 17</td><td><span class="pill watch">In progress</span></td></tr>
+        <tr><td>C. Mbeki</td><td>Aug 29</td><td>Classroom management</td><td>Establish consistent late-work policy and communicate to families</td><td>Sept 12</td><td><span class="pill urgent">Overdue</span></td></tr>
+      </table>
+    </div>
+  </section>
+
+  <!-- ON TRACK TO GRADUATE -->
+  <section class="panel" id="graduation">
+    <div class="section-title">On track to graduate <span class="hint">Scoped to 12th grade · credits, Menu of Options, and current at-risk failing grades</span></div>
+
+    <div class="grid-3">
+      <div class="card">
+        <h3>Percent OTG by credits</h3>
+        <div style="font-size:32px;font-weight:700;">95%</div>
+        <div style="font-size:12.5px;color:var(--ink-soft);margin-top:4px;">Seniors on pace to earn required credits</div>
+      </div>
+      <div class="card">
+        <h3>Percent OTG by menu of options</h3>
+        <div style="font-size:32px;font-weight:700;">91%</div>
+        <div style="font-size:12.5px;color:var(--ink-soft);margin-top:4px;">Seniors with a completed or on-pace Menu of Options pathway</div>
+      </div>
+      <div class="card">
+        <h3>Percent OTG overall (credits + menu)</h3>
+        <div style="font-size:32px;font-weight:700;color:var(--urgent);">88%</div>
+        <div style="font-size:12.5px;color:var(--ink-soft);margin-top:4px;">Seniors on track on both measures at once</div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:24px;">
+      <h3>Off-track — credits (12th grade)</h3>
+      <table>
+        <tr><th>Student</th><th>Counselor</th><th>Credits earned / needed</th><th>Credit(s) missing</th><th>Action</th><th>Owner</th></tr>
+        <tr><td>Maddox Hale</td><td>Mr. Okonjo</td><td>21 / 24 earned</td><td>English</td><td>Credit-recovery block; tutoring 2x/week with English dept.</td><td>Counselor + Dept. Chair</td></tr>
+        <tr><td>Jamal Whitfield</td><td>Mr. Okonjo</td><td>22 / 24 earned</td><td>Math</td><td>Move to co-taught section; weekly progress monitoring</td><td>Counselor + Math Dept.</td></tr>
+        <tr><td>Tyler Brennan</td><td>Mr. Okonjo</td><td>21.5 / 24 earned</td><td>Science</td><td>Enroll in online credit-recovery course for Science; counselor tracking weekly</td><td>Counselor</td></tr>
+      </table>
+    </div>
+
+    <div class="card" style="margin-bottom:24px;">
+      <h3>Off-track — menu of options (12th grade)</h3>
+      <table>
+        <tr><th>Student</th><th>Counselor</th><th>Area</th><th>Missing pathway</th><th>Action</th><th>Owner</th></tr>
+        <tr><td>Camille Ortiz</td><td>Mr. Okonjo</td><td><span class="pill info">English</span></td><td>No qualifying assessment score or alternate pathway demonstrated yet</td><td>English menu-support seminar; register for next test date</td><td>Counselor</td></tr>
+        <tr><td>Priya Chandrasekar</td><td>Mr. Okonjo</td><td><span class="pill info">Math</span></td><td>No qualifying SAT Math benchmark or alternate pathway</td><td>Register for next SAT window; math menu-support block</td><td>Counselor</td></tr>
+        <tr><td>Jamal Whitfield</td><td>Mr. Okonjo</td><td><span class="pill urgent">Both</span></td><td>No qualifying score in English or Math; no alternate demonstrated</td><td>Enroll in concurrent-enrollment course for spring; identify best-fit option with counselor</td><td>Counselor</td></tr>
+      </table>
+    </div>
+
+    <div class="card">
+      <h3>At risk — currently failing a class (12th grade)</h3>
+      <p style="font-size:13px;color:var(--ink-soft);margin-bottom:12px;">Any senior failing a class right now, whether or not they're formally off-track yet — an early-warning net before it becomes a credit deficiency.</p>
+      <table>
+        <tr><th>Student</th><th>Class</th><th>Teacher</th><th>Current grade</th><th>Attendance in class</th></tr>
+        <tr><td>Maddox Hale</td><td>English 12</td><td>Ms. Delacroix</td><td>54%</td><td>78%</td></tr>
+        <tr><td>Jamal Whitfield</td><td>Algebra II</td><td>Mr. Feld</td><td>49%</td><td>71%</td></tr>
+        <tr><td>Jamal Whitfield</td><td>Physics</td><td>Mr. Doyle</td><td>58%</td><td>75%</td></tr>
+        <tr><td>Jamal Whitfield</td><td>English 12</td><td>Ms. Delacroix</td><td>52%</td><td>73%</td></tr>
+        <tr><td>Tyler Brennan</td><td>Chemistry</td><td>Dr. Whitson</td><td>58%</td><td>80%</td></tr>
+        <tr><td>Camille Ortiz</td><td>Economics</td><td>Ms. Paulsen</td><td>55%</td><td>82%</td></tr>
+        <tr><td>Priya Chandrasekar</td><td>Physics</td><td>Mr. Doyle</td><td>59%</td><td>85%</td></tr>
+        <tr><td>Owen Castellanos</td><td>Spanish IV</td><td>Ms. Reyes</td><td>57%</td><td>79%</td></tr>
+      </table>
+    </div>
+
+    <div class="footnote">
+      Mockup data is entirely fictional. In production, this detail should pull from the student information system's credit-audit and Menu of Options tracking, restricted to counselors and administrators with a documented legitimate educational interest, consistent with FERPA and Colorado student data privacy requirements. Owen Castellanos appears only on the at-risk list — a student not yet formally off-track but flagged early because of a currently failing grade. Others (e.g. Jamal Whitfield) appear on multiple lists, which reflects a real student facing more than one issue at once.
+    </div>
+  </section>
+
+  <!-- NEEDS ATTENTION -->
+  <section class="panel" id="attention">
+    <div class="section-title">Students needing attention <span class="hint">Aggregated flags · role-restricted detail · click a row to expand</span></div>
+
+    <div class="filter-bar" id="filterbar">
+      <div class="chip on" data-flag="all"><span class="dot" style="background:var(--ink-soft)"></span>All (14)</div>
+      <div class="chip" data-flag="attendance"><span class="dot" style="background:var(--watch)"></span>Chronic absenteeism (5)</div>
+      <div class="chip" data-flag="grades"><span class="dot" style="background:var(--urgent)"></span>Failing 2+ classes (4)</div>
+      <div class="chip" data-flag="return"><span class="dot" style="background:var(--info)"></span>Returning from suspension (1)</div>
+      <div class="chip" data-flag="detention"><span class="dot" style="background:var(--brand)"></span>New detention (2)</div>
+      <div class="chip" data-flag="referrals"><span class="dot" style="background:var(--urgent)"></span>Multiple referrals (1)</div>
+      <div class="chip" data-flag="drop"><span class="dot" style="background:var(--watch)"></span>Grade/attendance drop (3)</div>
+      <div class="chip" data-flag="iep"><span class="dot" style="background:var(--info)"></span>IEP/504 meeting this week (3)</div>
+    </div>
+
+    <div class="student-list" id="studentlist"></div>
+
+    <div class="footnote">
+      Mockup data is entirely fictional. In production, this list should pull from SIS/behavior systems via row-level security, restricted to staff with a documented legitimate educational interest, with access logged per FERPA and Colorado student data privacy requirements.
+    </div>
+  </section>
+
 </main>
+
+<script>
+// ---- Tab switching ----
+document.querySelectorAll('.tab').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(btn.dataset.tab).classList.add('active');
+  });
+});
+
+// ---- Needs Attention data ----
+const FLAGS = {
+  attendance:{label:'Chronic absenteeism', pill:'watch'},
+  grades:{label:'Failing 2+ classes', pill:'urgent'},
+  return:{label:'Returning from suspension', pill:'info'},
+  detention:{label:'New detention', pill:'watch'},
+  referrals:{label:'Multiple referrals', pill:'urgent'},
+  drop:{label:'Grade/attendance drop', pill:'watch'},
+  iep:{label:'IEP/504 meeting this week', pill:'info'}
+};
+
+const students = [
+  {name:'Elias Nakamura', grade:'9th', homeroom:'Ms. Whitcombe', flags:['attendance'],
+   detail:{Attendance:'86% (30-day)', 'Current GPA':'3.1', Note:'New to district; adjusting to schedule. Counselor check-in this week.'}},
+  {name:'Devin Okafor', grade:'9th', homeroom:'Ms. Whitcombe', flags:['grades','drop'],
+   detail:{'Failing classes':'Algebra I, Biology', 'GPA change':'2.8 → 2.1 since last quarter', Note:'Added academic support elective for next term.'}},
+  {name:'Trevon Michaels', grade:'10th', homeroom:'Mr. Kim', flags:['grades'],
+   detail:{'Failing classes':'Geometry, World History', 'Current GPA':'2.0', Note:'Behind on credit pace; catch-up plan being built with counselor.'}},
+  {name:'Grace Lindqvist', grade:'10th', homeroom:'Mr. Kim', flags:['attendance','drop'],
+   detail:{Attendance:'69% (30-day)', 'GPA change':'2.6 → 2.0 since last quarter', Note:'Truancy mediation meeting scheduled Thu; at risk of losing credit.'}},
+  {name:'Nate Fielding', grade:'10th', homeroom:'Mr. Kim', flags:['detention'],
+   detail:{Detention:'Assigned today, Rm 118, 3:30 PM', Reason:'Repeated tardiness', Note:'Third tardy-related consequence this month.'}},
+  {name:'Bianca Souza', grade:'11th', homeroom:'Ms. Alvarado', flags:['attendance'],
+   detail:{Attendance:'82% (30-day)', 'Current GPA':'2.9', Note:'Attendance contract in place with family; daily check-in.'}},
+  {name:'Renata Alvez', grade:'11th', homeroom:'Ms. Alvarado', flags:['grades'],
+   detail:{'Failing classes':'Chemistry, English 11', 'Current GPA':'2.2', Note:'Also behind on service-hour requirement — see Graduation Tracking.'}},
+  {name:'Isaiah Cortez', grade:'11th', homeroom:'Ms. Alvarado', flags:['return'],
+   detail:{'Returning':'From 2-day OSS, today', 'Last incident':'Sept 2 — physical altercation', Note:'Re-entry conference completed with counselor this AM.'}},
+  {name:'Camille Ortiz', grade:'12th', homeroom:'Mr. Okonjo', flags:['referrals'],
+   detail:{Referrals:'3 in past 2 weeks', 'Last incident':'Sept 5 — classroom disruption', Note:'Team meeting requested by 12th grade dean.'}},
+  {name:'Maddox Hale', grade:'12th', homeroom:'Mr. Okonjo', flags:['attendance','drop'],
+   detail:{Attendance:'84% (30-day)', 'GPA change':'3.0 → 2.6 since last quarter', Note:'At risk of losing credit in 2 courses — see Graduation Tracking.'}},
+  {name:'Jamal Whitfield', grade:'12th', homeroom:'Mr. Okonjo', flags:['grades'],
+   detail:{'Failing classes':'Algebra II, Physics, English 12', 'Current GPA':'1.8', Note:'Required-course failures — see Graduation Tracking for plan.'}},
+  {name:'Marisol Diaz', grade:'9th', homeroom:'Ms. Whitcombe', flags:['iep'],
+   detail:{'IEP/504 meeting':'Today, 9:30 AM — Counseling Suite Rm 2', Attendance:'95%', Note:'Annual review, no concerns flagged by case manager.'}},
+  {name:'Priya Chandrasekar', grade:'12th', homeroom:'Mr. Okonjo', flags:['iep'],
+   detail:{'IEP/504 meeting':'Thu, 10:00 AM — Counseling Suite Rm 2', Attendance:'93%', Note:'Also flagged for missing state assessment — see Graduation Tracking.'}},
+  {name:'Harper Doyle', grade:'11th', homeroom:'Ms. Alvarado', flags:['iep'],
+   detail:{'IEP/504 meeting':'Fri, 1:00 PM — Counseling Suite Rm 2', Attendance:'97%', Note:'Transition planning meeting, family confirmed attendance.'}}
+];
+
+const listEl = document.getElementById('studentlist');
+function pillHtml(flagKey){ const f = FLAGS[flagKey]; return `<span class="pill ${f.pill}">${f.label}</span>`; }
+function render(filter){
+  listEl.innerHTML = '';
+  students.filter(s => filter==='all' || s.flags.includes(filter)).forEach(s=>{
+    const card = document.createElement('div');
+    card.className = 'student-card';
+    const detailRows = Object.entries(s.detail).filter(([k])=>k!=='Note')
+      .map(([k,v])=>`<div class="detail-item"><div class="k">${k}</div><div class="v">${v}</div></div>`).join('');
+    card.innerHTML = `
+      <div class="student-head">
+        <div class="student-id"><div><div class="name">${s.name}</div><div class="meta">${s.grade} grade · Counselor ${s.homeroom}</div></div></div>
+        <div class="student-flags">${s.flags.map(pillHtml).join('')}</div>
+        <div class="chev">&#9656;</div>
+      </div>
+      <div class="student-detail">
+        <div class="detail-grid">${detailRows}</div>
+        <div class="detail-note">${s.detail.Note ? s.detail.Note : ''}</div>
+      </div>`;
+    card.querySelector('.student-head').addEventListener('click', ()=> card.classList.toggle('open'));
+    listEl.appendChild(card);
+  });
+}
+render('all');
+document.querySelectorAll('#filterbar .chip').forEach(chip=>{
+  chip.addEventListener('click', ()=>{
+    document.querySelectorAll('#filterbar .chip').forEach(c=>c.classList.remove('on'));
+    chip.classList.add('on');
+    render(chip.dataset.flag);
+  });
+});
+
+</script>
 
 </body>
 </html>
