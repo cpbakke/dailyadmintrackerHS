@@ -64,17 +64,44 @@
 
   .pie-row{ display:flex; flex-wrap:wrap; gap:32px; align-items:flex-start; }
   .pie-block{ display:flex; align-items:center; gap:18px; }
-  .pie{ width:130px; height:130px; border-radius:50%; flex-shrink:0; }
+  .pie{ width:130px; height:130px; flex-shrink:0; }
+  .pie svg path{ transition:opacity .12s ease; }
   .pie-legend{ font-size:12.5px; }
-  .pie-legend .legend-row{ display:flex; align-items:center; gap:7px; margin-bottom:5px; white-space:nowrap; }
+  .pie-legend .legend-row{ display:flex; align-items:center; gap:7px; margin-bottom:5px; white-space:nowrap; border-radius:4px; padding:1px 4px; margin-left:-4px; }
+  .pie-legend .legend-row:hover{ background:var(--brand-soft); }
+  .pie-legend .legend-row.legend-active{ background:var(--brand-soft); font-weight:700; }
   .pie-legend .legend-dot{ width:9px; height:9px; border-radius:50%; flex-shrink:0; }
   .pie-legend strong{ margin-left:auto; padding-left:10px; }
+  .pie-hint{ font-size:11.5px; color:var(--ink-faint); margin-bottom:10px; }
 
   .table-scroll{ overflow-x:auto; }
   .check-table{ font-size:12.5px; }
   .check-table th{ white-space:nowrap; }
   .check-table td.check{ text-align:center; }
   .check-mark{ color:var(--urgent); font-weight:700; }
+
+  .tableau-layout{ display:flex; gap:20px; align-items:flex-start; }
+  .filter-sidebar{
+    width:190px; flex-shrink:0; background:var(--surface); border:1px solid var(--line);
+    border-radius:var(--radius); padding:16px;
+  }
+  .filter-sidebar h4{ font-size:13px; margin-bottom:12px; color:var(--brand); }
+  .filter-group{ margin-bottom:16px; }
+  .filter-group-title{ font-size:10.5px; font-weight:700; text-transform:uppercase; letter-spacing:.03em; color:var(--ink-soft); margin-bottom:6px; }
+  .filter-group label{ display:flex; align-items:center; gap:6px; font-size:12.5px; margin-bottom:4px; cursor:pointer; color:var(--ink); }
+  .filter-group input[type=checkbox]{ accent-color:var(--brand); }
+  .clear-filters-btn{
+    width:100%; background:var(--brand-soft); color:var(--brand); border:none; border-radius:6px;
+    padding:7px; font-size:12px; font-weight:600; cursor:pointer;
+  }
+  .clear-filters-btn:hover{ background:#DCE7E8; }
+  .tableau-main{ flex:1; min-width:0; }
+  .result-count{ font-size:12.5px; color:var(--ink-soft); margin-bottom:10px; }
+
+  @media (max-width:900px){
+    .tableau-layout{ flex-direction:column; }
+    .filter-sidebar{ width:100%; }
+  }
 
   .tabbar{
     display:flex; gap:4px; padding:0 32px; background:var(--surface);
@@ -181,8 +208,7 @@
 </div>
 
 <div class="tabbar" id="tabbar">
-  <button class="tab active" data-tab="overview">Overview</button>
-  <button class="tab" data-tab="attendance">Attendance</button>
+  <button class="tab active" data-tab="attendance">Attendance</button>
   <button class="tab" data-tab="academics">Academics</button>
   <button class="tab" data-tab="behavior">Behavior &amp; Safety</button>
   <button class="tab" data-tab="staff">Staff</button>
@@ -193,335 +219,98 @@
 
 <main>
 
-  <!-- OVERVIEW -->
-  <section class="panel active" id="overview">
-    <div class="kpi-grid">
-      <div class="kpi">
-        <div class="label">Attendance today</div>
-        <div class="value">89.7%</div>
-        <div class="delta watch">▼ 2.3 pts vs. target</div>
-      </div>
-      <div class="kpi">
-        <div class="label">Staff coverage</div>
-        <div class="value">8 out</div>
-        <div class="delta urgent">2 periods unfilled</div>
-      </div>
-      <div class="kpi">
-        <div class="label">Behavior incidents (7-day)</div>
-        <div class="value">19</div>
-        <div class="delta watch">— flat vs. last week</div>
-      </div>
-      <div class="kpi">
-        <div class="label">Health office visits</div>
-        <div class="value">13</div>
-        <div class="delta watch">▲ above weekly avg</div>
-      </div>
-      <div class="kpi">
-        <div class="label">Enrollment</div>
-        <div class="value">1,384</div>
-        <div class="delta good">+3 this week</div>
-      </div>
-      <div class="kpi flagged">
-        <div class="label">Students needing attention</div>
-        <div class="value">14</div>
-        <div class="delta urgent">3 new since yesterday</div>
-      </div>
-      <div class="kpi flagged">
-        <div class="label">Seniors off-track to graduate</div>
-        <div class="value">5</div>
-        <div class="delta urgent">1 new since last review</div>
-      </div>
-    </div>
-
-    <div class="grid-2">
-      <div class="card">
-        <h3>Needs-attention breakdown</h3>
-        <div class="bar-row"><div class="lbl">Chronic abs.</div><div class="bar-track"><div class="bar-fill watch" style="width:60%"></div></div><div class="bar-val">5</div></div>
-        <div class="bar-row"><div class="lbl">Failing 2+</div><div class="bar-track"><div class="bar-fill urgent" style="width:50%"></div></div><div class="bar-val">4</div></div>
-        <div class="bar-row"><div class="lbl">Return-suspd.</div><div class="bar-track"><div class="bar-fill" style="width:20%"></div></div><div class="bar-val">1</div></div>
-        <div class="bar-row"><div class="lbl">New detention</div><div class="bar-track"><div class="bar-fill" style="width:30%"></div></div><div class="bar-val">2</div></div>
-        <div class="bar-row"><div class="lbl">Referrals x3+</div><div class="bar-track"><div class="bar-fill urgent" style="width:20%"></div></div><div class="bar-val">1</div></div>
-        <div class="bar-row"><div class="lbl">Off-track grad (12th)</div><div class="bar-track"><div class="bar-fill urgent" style="width:36%"></div></div><div class="bar-val">5</div></div>
-      </div>
-      <div class="card"><h3>Attendance trend, 4 wks</h3><div style="font-size:13px;color:var(--ink-soft);">93% → 92% → 91% → 90%<br>Seniors trending lowest of all grades.</div></div>
-    </div>
-    <div class="grid-2">
-      <div class="card"><h3>Staffing snapshot</h3><div style="font-size:13px;color:var(--ink-soft);">8 teachers out · 6 subs placed · 2 gaps (2nd period Chem, 5th period US Hist) · dept. chairs covering</div></div>
-      <div class="card"><h3>Safety note</h3><div style="font-size:13px;color:var(--ink-soft);">No active safety concerns. Parking lot camera 4 flagged for maintenance.</div></div>
-    </div>
-
-    <div class="card">
-      <h3>Week at a glance — Sept 8–12</h3>
-      <div class="event-row"><div class="event-time">Tue</div><div><span class="pill good">Event</span>&nbsp; College &amp; career fair, main gym, all day</div></div>
-      <div class="event-row"><div class="event-time">Wed</div><div><span class="pill info">Testing</span>&nbsp; PSAT/SAT school-day testing, juniors &amp; seniors — periods 1–3</div></div>
-      <div class="event-row"><div class="event-time">Thu</div><div><span class="pill watch">Field trip</span>&nbsp; AP Environmental Science — water treatment plant, permission slips due Tue</div></div>
-      <div class="event-row"><div class="event-time">Fri</div><div><span class="pill urgent">Drill</span>&nbsp; Lockdown drill, scheduled, all periods — district requirement</div></div>
-    </div>
-  </section>
-
-  <!-- ATTENDANCE -->
-  <section class="panel" id="attendance">
-    <div class="card" style="margin-bottom:24px;">
-      <h3>Demographic breakdown — present vs. absent, today</h3>
-      <div class="pie-row">
-        <div class="pie-block">
-          <div class="pie" id="pie-present"></div>
-          <div>
-            <div style="font-size:12.5px;font-weight:600;color:var(--ink-soft);margin-bottom:6px;">Present students</div>
-            <div class="pie-legend" id="legend-present"></div>
+  <section class="panel active" id="attendance">
+    <div class="section-title" style="margin-top:8px;">Chronic absenteeism — all students below threshold</div>
+    <div class="tableau-layout">
+      <aside class="filter-sidebar" id="att-sidebar">
+        <h4>Filters</h4>
+        <div class="filter-group" id="att-filter-grade"><div class="filter-group-title">Grade</div></div>
+        <div class="filter-group" id="att-filter-gender"><div class="filter-group-title">Gender</div></div>
+        <div class="filter-group" id="att-filter-iep"><div class="filter-group-title">IEP Status</div></div>
+        <div class="filter-group" id="att-filter-ell"><div class="filter-group-title">ELL Status</div></div>
+        <div class="filter-group" id="att-filter-race"><div class="filter-group-title">Race</div></div>
+        <button class="clear-filters-btn" id="att-clear">Clear all filters</button>
+      </aside>
+      <div class="tableau-main">
+        <div class="result-count" id="att-count"></div>
+        <div class="card" style="margin-bottom:18px;">
+          <div class="pie-hint">Click a slice (or legend item) to filter — click again to clear. Ctrl/Shift-click to select multiple.</div>
+          <div class="pie-row" id="att-pies">
+            <div class="pie-block"><div class="pie" id="att-pie-grade"></div><div><div style="font-size:12.5px;font-weight:600;color:var(--ink-soft);margin-bottom:6px;">Grade</div><div class="pie-legend" id="att-legend-grade"></div></div></div>
+            <div class="pie-block"><div class="pie" id="att-pie-gender"></div><div><div style="font-size:12.5px;font-weight:600;color:var(--ink-soft);margin-bottom:6px;">Gender</div><div class="pie-legend" id="att-legend-gender"></div></div></div>
+            <div class="pie-block"><div class="pie" id="att-pie-iep"></div><div><div style="font-size:12.5px;font-weight:600;color:var(--ink-soft);margin-bottom:6px;">IEP status</div><div class="pie-legend" id="att-legend-iep"></div></div></div>
+            <div class="pie-block"><div class="pie" id="att-pie-ell"></div><div><div style="font-size:12.5px;font-weight:600;color:var(--ink-soft);margin-bottom:6px;">ELL status</div><div class="pie-legend" id="att-legend-ell"></div></div></div>
+            <div class="pie-block"><div class="pie" id="att-pie-race"></div><div><div style="font-size:12.5px;font-weight:600;color:var(--ink-soft);margin-bottom:6px;">Race</div><div class="pie-legend" id="att-legend-race"></div></div></div>
           </div>
         </div>
-        <div class="pie-block">
-          <div class="pie" id="pie-absent"></div>
-          <div>
-            <div style="font-size:12.5px;font-weight:600;color:var(--ink-soft);margin-bottom:6px;">Absent students</div>
-            <div class="pie-legend" id="legend-absent"></div>
-          </div>
+        <div class="card table-scroll">
+          <table class="check-table" id="att-table"></table>
         </div>
       </div>
-    </div>
-    <div class="grid-2">
-      <div class="card">
-        <h3>Attendance rate by grade — today</h3>
-        <div class="bar-row"><div class="lbl">9th grade</div><div class="bar-track"><div class="bar-fill" style="width:92%"></div></div><div class="bar-val">92%</div></div>
-        <div class="bar-row"><div class="lbl">10th grade</div><div class="bar-track"><div class="bar-fill watch" style="width:90%"></div></div><div class="bar-val">90%</div></div>
-        <div class="bar-row"><div class="lbl">11th grade</div><div class="bar-track"><div class="bar-fill watch" style="width:89%"></div></div><div class="bar-val">89%</div></div>
-        <div class="bar-row"><div class="lbl">12th grade</div><div class="bar-track"><div class="bar-fill urgent" style="width:87%"></div></div><div class="bar-val">87%</div></div>
-      </div>
-      <div class="card">
-        <h3>Chronic absenteeism trend</h3>
-        <p style="font-size:13px;color:var(--ink-soft);">Students below 90% attendance over rolling 30 days.</p>
-        <div style="font-size:26px;font-weight:700;">61 <span style="font-size:13px;font-weight:500;color:var(--ink-soft);">students (4.4% of school)</span></div>
-      </div>
-    </div>
-    <div class="card" style="margin-bottom:24px;">
-      <h3>Tardies by grade — today</h3>
-      <table>
-        <tr><th>Grade</th><th>Tardies</th><th>Most common period</th></tr>
-        <tr><td>9th grade</td><td>12</td><td>1st period</td></tr>
-        <tr><td>10th grade</td><td>17</td><td>after lunch</td></tr>
-        <tr><td>11th grade</td><td>14</td><td>1st period</td></tr>
-        <tr><td>12th grade</td><td>21</td><td>1st period (open-campus lunch return)</td></tr>
-      </table>
-    </div>
-
-    <div class="card">
-      <h3>Needs-attention list — chronic absenteeism, by grade</h3>
-      <table>
-        <tr><th>Student</th><th>Counselor</th><th>Attendance (30-day)</th><th>Days absent</th><th>Note</th></tr>
-        <tr class="group-row"><td colspan="5">9th grade</td></tr>
-        <tr><td>Elias Nakamura</td><td>Ms. Whitcombe</td><td>86%</td><td>8</td><td>New to district, adjusting to schedule</td></tr>
-        <tr><td>Ava Whitfield</td><td>Ms. Whitcombe</td><td>88%</td><td>7</td><td>Attendance letter sent home</td></tr>
-        <tr><td>Marcus Delgado</td><td>Ms. Whitcombe</td><td>84%</td><td>9</td><td>Chronic illness documentation pending</td></tr>
-        <tr><td>Sophie Tran</td><td>Ms. Whitcombe</td><td>87%</td><td>8</td><td>Family engagement meeting scheduled</td></tr>
-        <tr><td>Noah Kimura</td><td>Ms. Whitcombe</td><td>83%</td><td>10</td><td>Attendance improvement plan started</td></tr>
-        <tr class="group-row"><td colspan="5">10th grade</td></tr>
-        <tr><td>Grace Lindqvist</td><td>Mr. Kim</td><td>69%</td><td>19</td><td>Truancy mediation meeting scheduled Thu</td></tr>
-        <tr><td>Diego Fontaine</td><td>Mr. Kim</td><td>85%</td><td>8</td><td>Attendance letter sent home</td></tr>
-        <tr><td>Layla Osei</td><td>Mr. Kim</td><td>82%</td><td>9</td><td>Family conference held last week</td></tr>
-        <tr><td>Ryder Ashworth</td><td>Mr. Kim</td><td>86%</td><td>7</td><td>Monitoring after transportation issue resolved</td></tr>
-        <tr><td>Mia Castellano</td><td>Mr. Kim</td><td>80%</td><td>11</td><td>Attendance contract signed</td></tr>
-        <tr class="group-row"><td colspan="5">11th grade</td></tr>
-        <tr><td>Bianca Souza</td><td>Ms. Alvarado</td><td>82%</td><td>13</td><td>Attendance contract in place with family</td></tr>
-        <tr><td>Xavier Boone</td><td>Ms. Alvarado</td><td>85%</td><td>9</td><td>Attendance letter sent home</td></tr>
-        <tr><td>Harper Nwosu</td><td>Ms. Alvarado</td><td>83%</td><td>10</td><td>Family engagement meeting scheduled</td></tr>
-        <tr><td>Owen Petrakis</td><td>Ms. Alvarado</td><td>87%</td><td>8</td><td>Chronic illness documentation pending</td></tr>
-        <tr><td>Zara Whitcomb</td><td>Ms. Alvarado</td><td>81%</td><td>12</td><td>Truancy referral submitted</td></tr>
-        <tr class="group-row"><td colspan="5">12th grade</td></tr>
-        <tr><td>Maddox Hale</td><td>Mr. Okonjo</td><td>84%</td><td>12</td><td>At risk of losing credit in 2 courses</td></tr>
-        <tr><td>Isabela Cruz</td><td>Mr. Okonjo</td><td>86%</td><td>8</td><td>Attendance letter sent home</td></tr>
-        <tr><td>Julian Ferreira</td><td>Mr. Okonjo</td><td>83%</td><td>10</td><td>Senior credit-check flagged</td></tr>
-        <tr><td>Ruby Solano</td><td>Mr. Okonjo</td><td>88%</td><td>7</td><td>Improved past 2 weeks, continued monitoring</td></tr>
-        <tr><td>Malik Toussaint</td><td>Mr. Okonjo</td><td>81%</td><td>11</td><td>Attendance contract in place</td></tr>
-      </table>
     </div>
   </section>
 
   <!-- ACADEMICS -->
   <section class="panel" id="academics">
-    <div class="card" style="margin-bottom:24px;">
-      <h3>Students failing 2+ classes — breakdown by grade</h3>
-      <div class="pie-row">
-        <div class="pie-block">
-          <div class="pie" id="pie-failing-grade"></div>
-          <div class="pie-legend" id="legend-failing-grade"></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="card" style="margin-bottom:24px;">
-      <h3>Students failing 2+ classes — demographic breakdown</h3>
-      <div class="pie-row">
-        <div class="pie-block">
-          <div class="pie" id="pie-failing-iep"></div>
-          <div>
-            <div style="font-size:12.5px;font-weight:600;color:var(--ink-soft);margin-bottom:6px;">IEP status</div>
-            <div class="pie-legend" id="legend-failing-iep"></div>
+    <div class="section-title">Students failing 2+ classes — all students</div>
+    <div class="tableau-layout">
+      <aside class="filter-sidebar" id="acad-sidebar">
+        <h4>Filters</h4>
+        <div class="filter-group" id="acad-filter-grade"><div class="filter-group-title">Grade</div></div>
+        <div class="filter-group" id="acad-filter-gender"><div class="filter-group-title">Gender</div></div>
+        <div class="filter-group" id="acad-filter-iep"><div class="filter-group-title">IEP Status</div></div>
+        <div class="filter-group" id="acad-filter-ell"><div class="filter-group-title">ELL Status</div></div>
+        <div class="filter-group" id="acad-filter-race"><div class="filter-group-title">Race</div></div>
+        <button class="clear-filters-btn" id="acad-clear">Clear all filters</button>
+      </aside>
+      <div class="tableau-main">
+        <div class="result-count" id="acad-count"></div>
+        <div class="card" style="margin-bottom:18px;">
+          <div class="pie-hint">Click a slice (or legend item) to filter — click again to clear. Ctrl/Shift-click to select multiple.</div>
+          <div class="pie-row" id="acad-pies">
+            <div class="pie-block"><div class="pie" id="acad-pie-grade"></div><div><div style="font-size:12.5px;font-weight:600;color:var(--ink-soft);margin-bottom:6px;">Grade</div><div class="pie-legend" id="acad-legend-grade"></div></div></div>
+            <div class="pie-block"><div class="pie" id="acad-pie-gender"></div><div><div style="font-size:12.5px;font-weight:600;color:var(--ink-soft);margin-bottom:6px;">Gender</div><div class="pie-legend" id="acad-legend-gender"></div></div></div>
+            <div class="pie-block"><div class="pie" id="acad-pie-iep"></div><div><div style="font-size:12.5px;font-weight:600;color:var(--ink-soft);margin-bottom:6px;">IEP status</div><div class="pie-legend" id="acad-legend-iep"></div></div></div>
+            <div class="pie-block"><div class="pie" id="acad-pie-ell"></div><div><div style="font-size:12.5px;font-weight:600;color:var(--ink-soft);margin-bottom:6px;">ELL status</div><div class="pie-legend" id="acad-legend-ell"></div></div></div>
+            <div class="pie-block"><div class="pie" id="acad-pie-race"></div><div><div style="font-size:12.5px;font-weight:600;color:var(--ink-soft);margin-bottom:6px;">Race</div><div class="pie-legend" id="acad-legend-race"></div></div></div>
           </div>
         </div>
-        <div class="pie-block">
-          <div class="pie" id="pie-failing-ell"></div>
-          <div>
-            <div style="font-size:12.5px;font-weight:600;color:var(--ink-soft);margin-bottom:6px;">ELL status</div>
-            <div class="pie-legend" id="legend-failing-ell"></div>
-          </div>
-        </div>
-        <div class="pie-block">
-          <div class="pie" id="pie-failing-gender"></div>
-          <div>
-            <div style="font-size:12.5px;font-weight:600;color:var(--ink-soft);margin-bottom:6px;">Gender</div>
-            <div class="pie-legend" id="legend-failing-gender"></div>
-          </div>
-        </div>
-        <div class="pie-block">
-          <div class="pie" id="pie-failing-race"></div>
-          <div>
-            <div style="font-size:12.5px;font-weight:600;color:var(--ink-soft);margin-bottom:6px;">Race/ethnicity</div>
-            <div class="pie-legend" id="legend-failing-race"></div>
-          </div>
+        <div class="card table-scroll">
+          <table class="check-table" id="acad-table"></table>
         </div>
       </div>
-    </div>
-    <div class="grid-2">
-      <div class="card">
-        <h3>Students failing 2+ classes, by grade</h3>
-        <div class="bar-row"><div class="lbl">9th grade</div><div class="bar-track"><div class="bar-fill" style="width:22%"></div></div><div class="bar-val">18</div></div>
-        <div class="bar-row"><div class="lbl">10th grade</div><div class="bar-track"><div class="bar-fill watch" style="width:30%"></div></div><div class="bar-val">24</div></div>
-        <div class="bar-row"><div class="lbl">11th grade</div><div class="bar-track"><div class="bar-fill watch" style="width:28%"></div></div><div class="bar-val">22</div></div>
-        <div class="bar-row"><div class="lbl">12th grade</div><div class="bar-track"><div class="bar-fill urgent" style="width:34%"></div></div><div class="bar-val">27</div></div>
-      </div>
-      <div class="card">
-        <h3>Benchmark snapshot (interim 1)</h3>
-        <p style="font-size:13px;color:var(--ink-soft);">% of students meeting grade-level benchmark, ELA / Math</p>
-        <div style="font-size:13px;">ELA: <strong>64%</strong> &nbsp;·&nbsp; Math: <strong>57%</strong></div>
-      </div>
-    </div>
-
-    <div class="card" style="margin-bottom:24px;">
-      <h3>Grade-drop watch</h3>
-      <p style="font-size:13px;color:var(--ink-soft);">Students whose GPA or attendance dropped noticeably since last check-in — see Needs Attention tab for individual detail.</p>
-    </div>
-
-    <div class="card">
-      <h3>Needs-attention list — failing 2+ classes, by grade</h3>
-      <table>
-        <tr><th>Student</th><th>Classes failing (this week)</th><th>Last week</th><th>2 weeks ago</th></tr>
-        <tr class="group-row"><td colspan="4">9th grade</td></tr>
-        <tr><td>Devin Okafor</td><td>2</td><td>2</td><td>1</td></tr>
-        <tr><td>Chloe Bergman</td><td>2</td><td>1</td><td>1</td></tr>
-        <tr><td>Andre Silva</td><td>3</td><td>2</td><td>2</td></tr>
-        <tr><td>Lily Hoffmann</td><td>2</td><td>2</td><td>2</td></tr>
-        <tr><td>Kaiden Brooks</td><td>2</td><td>1</td><td>0</td></tr>
-        <tr class="group-row"><td colspan="4">10th grade</td></tr>
-        <tr><td>Trevon Michaels</td><td>2</td><td>1</td><td>1</td></tr>
-        <tr><td>Nadia Rourke</td><td>2</td><td>2</td><td>1</td></tr>
-        <tr><td>Preston Vance</td><td>3</td><td>3</td><td>2</td></tr>
-        <tr><td>Ines Delacroix</td><td>2</td><td>1</td><td>1</td></tr>
-        <tr><td>Sawyer McAllister</td><td>2</td><td>2</td><td>2</td></tr>
-        <tr class="group-row"><td colspan="4">11th grade</td></tr>
-        <tr><td>Renata Alvez</td><td>2</td><td>2</td><td>1</td></tr>
-        <tr><td>Cassius Wren</td><td>3</td><td>2</td><td>2</td></tr>
-        <tr><td>Yasmin Farouk</td><td>2</td><td>1</td><td>1</td></tr>
-        <tr><td>Dominic Reyes</td><td>2</td><td>2</td><td>2</td></tr>
-        <tr><td>Willa Sandoval</td><td>2</td><td>1</td><td>1</td></tr>
-        <tr class="group-row"><td colspan="4">12th grade</td></tr>
-        <tr><td>Jamal Whitfield</td><td>3</td><td>2</td><td>2</td></tr>
-        <tr><td>Desmond Okoro</td><td>2</td><td>2</td><td>1</td></tr>
-        <tr><td>Fernanda Lopes</td><td>2</td><td>1</td><td>1</td></tr>
-        <tr><td>Tobias Kingsley</td><td>3</td><td>3</td><td>2</td></tr>
-        <tr><td>Selena Marchetti</td><td>2</td><td>2</td><td>1</td></tr>
-      </table>
     </div>
   </section>
 
   <!-- BEHAVIOR & SAFETY -->
   <section class="panel" id="behavior">
-    <div class="card" style="margin-bottom:24px;">
-      <h3>Students on behavior or safety plans</h3>
-      <p style="font-size:13px;color:var(--ink-soft);margin-bottom:12px;">What's required of admin, current cycle.</p>
-      <div class="plan-card" style="border:1px solid var(--line);border-radius:8px;padding:12px 14px;">
-        <div style="display:flex;justify-content:space-between;font-size:13.5px;font-weight:700;">Isaiah Cortez — 11th <span class="pill watch">Behavior plan</span></div>
-        <div style="font-size:13px;color:var(--ink-soft);margin-top:6px;">Admin: daily morning check-in through Sept 19; review incident log weekly with counselor. Next review: Sept 19.</div>
+    <div class="section-title">Students on behavior or safety plans — all students</div>
+    <div class="tableau-layout">
+      <aside class="filter-sidebar" id="plan-sidebar">
+        <h4>Filters</h4>
+        <div class="filter-group" id="plan-filter-grade"><div class="filter-group-title">Grade</div></div>
+        <div class="filter-group" id="plan-filter-gender"><div class="filter-group-title">Gender</div></div>
+        <div class="filter-group" id="plan-filter-iep"><div class="filter-group-title">IEP Status</div></div>
+        <div class="filter-group" id="plan-filter-ell"><div class="filter-group-title">ELL Status</div></div>
+        <div class="filter-group" id="plan-filter-race"><div class="filter-group-title">Race</div></div>
+        <button class="clear-filters-btn" id="plan-clear">Clear all filters</button>
+      </aside>
+      <div class="tableau-main">
+        <div class="result-count" id="plan-count"></div>
+        <div class="card" style="margin-bottom:18px;">
+          <div class="pie-hint">Click a slice (or legend item) to filter — click again to clear. Ctrl/Shift-click to select multiple.</div>
+          <div class="pie-row" id="plan-pies">
+            <div class="pie-block"><div class="pie" id="plan-pie-grade"></div><div><div style="font-size:12.5px;font-weight:600;color:var(--ink-soft);margin-bottom:6px;">Grade</div><div class="pie-legend" id="plan-legend-grade"></div></div></div>
+            <div class="pie-block"><div class="pie" id="plan-pie-gender"></div><div><div style="font-size:12.5px;font-weight:600;color:var(--ink-soft);margin-bottom:6px;">Gender</div><div class="pie-legend" id="plan-legend-gender"></div></div></div>
+            <div class="pie-block"><div class="pie" id="plan-pie-iep"></div><div><div style="font-size:12.5px;font-weight:600;color:var(--ink-soft);margin-bottom:6px;">IEP status</div><div class="pie-legend" id="plan-legend-iep"></div></div></div>
+            <div class="pie-block"><div class="pie" id="plan-pie-ell"></div><div><div style="font-size:12.5px;font-weight:600;color:var(--ink-soft);margin-bottom:6px;">ELL status</div><div class="pie-legend" id="plan-legend-ell"></div></div></div>
+            <div class="pie-block"><div class="pie" id="plan-pie-race"></div><div><div style="font-size:12.5px;font-weight:600;color:var(--ink-soft);margin-bottom:6px;">Race</div><div class="pie-legend" id="plan-legend-race"></div></div></div>
+          </div>
+        </div>
+        <div class="card table-scroll">
+          <table class="check-table" id="plan-table"></table>
+        </div>
       </div>
-      <div class="plan-card" style="border:1px solid var(--line);border-radius:8px;padding:12px 14px;">
-        <div style="display:flex;justify-content:space-between;font-size:13.5px;font-weight:700;">Marisol Diaz — 9th <span class="pill urgent">Safety plan</span></div>
-        <div style="font-size:13px;color:var(--ink-soft);margin-top:6px;">Admin: escorted hallway transitions between periods 2–4; notify all substitute teachers in advance. Next review: Sept 22.</div>
-      </div>
-      <div class="plan-card" style="border:1px solid var(--line);border-radius:8px;padding:12px 14px;">
-        <div style="display:flex;justify-content:space-between;font-size:13.5px;font-weight:700;">Xavier Boone — 11th <span class="pill watch">Behavior plan</span></div>
-        <div style="font-size:13px;color:var(--ink-soft);margin-top:6px;">Admin: daily lunch check-in; monitor cafeteria behavior log with lunch supervisor. Next review: Sept 25.</div>
-      </div>
-      <div class="plan-card" style="border:1px solid var(--line);border-radius:8px;padding:12px 14px;">
-        <div style="display:flex;justify-content:space-between;font-size:13.5px;font-weight:700;">Tyler Brennan — 12th <span class="pill watch">Behavior plan</span></div>
-        <div style="font-size:13px;color:var(--ink-soft);margin-top:6px;">Admin: weekly check-in with dean; review grades and attendance jointly with counselor. Next review: Sept 30.</div>
-      </div>
-      <div class="plan-card" style="border:1px solid var(--line);border-radius:8px;padding:12px 14px;">
-        <div style="display:flex;justify-content:space-between;font-size:13.5px;font-weight:700;">Nina Okonkwo — 9th <span class="pill watch">Behavior plan</span></div>
-        <div style="font-size:13px;color:var(--ink-soft);margin-top:6px;">Admin: daily first-period check-in; de-escalation plan on file with front office. Next review: Sept 20.</div>
-      </div>
-      <div class="plan-card" style="border:1px solid var(--line);border-radius:8px;padding:12px 14px;">
-        <div style="display:flex;justify-content:space-between;font-size:13.5px;font-weight:700;">Farrah Osei — 11th <span class="pill urgent">Safety plan</span></div>
-        <div style="font-size:13px;color:var(--ink-soft);margin-top:6px;">Admin: no unsupervised contact with a named peer group; monitor during passing periods. Next review: Sept 26.</div>
-      </div>
-      <div class="plan-card" style="border:1px solid var(--line);border-radius:8px;padding:12px 14px;">
-        <div style="display:flex;justify-content:space-between;font-size:13.5px;font-weight:700;">Cole Whitaker — 10th <span class="pill watch">Behavior plan</span></div>
-        <div style="font-size:13px;color:var(--ink-soft);margin-top:6px;">Admin: weekly progress note to counselor; positive behavior contract in place. Next review: Sept 23.</div>
-      </div>
-    </div>
-
-    <div class="grid-2">
-      <div class="card">
-        <h3>Incidents by type, 7-day</h3>
-        <table>
-          <tr><th>Type</th><th>Count</th><th>Trend</th></tr>
-          <tr><td>Classroom disruption</td><td>7</td><td><span class="pill good">▼ down</span></td></tr>
-          <tr><td>Physical altercation</td><td>3</td><td><span class="pill watch">— flat</span></td></tr>
-          <tr><td>Vaping / substance</td><td>5</td><td><span class="pill urgent">▲ up</span></td></tr>
-          <tr><td>Disrespect / defiance</td><td>3</td><td><span class="pill good">▼ down</span></td></tr>
-          <tr><td>Other</td><td>1</td><td><span class="pill good">▼ down</span></td></tr>
-        </table>
-      </div>
-      <div class="card">
-        <h3>Today's returns &amp; assignments</h3>
-        <p style="font-size:13px;"><span class="pill info">Returning</span> 1 student returning from out-of-school suspension</p>
-        <p style="font-size:13px;"><span class="pill watch">Detention</span> 2 students newly assigned this week, 6 total in today's session</p>
-      </div>
-    </div>
-
-    <div class="card" style="margin-bottom:24px;">
-      <h3>Visitor log summary — today</h3>
-      <p style="font-size:13px;color:var(--ink-soft);">9 visitors signed in · 1 district staff · 3 parent conferences · 4 college/career fair vendors</p>
-    </div>
-
-    <div class="card" style="margin-bottom:24px;">
-      <h3>Needs-attention list — behavior &amp; safety</h3>
-      <table>
-        <tr><th>Student</th><th>Category</th><th>Detail</th></tr>
-        <tr class="group-row"><td colspan="3">9th grade</td></tr>
-        <tr><td>Tariq Jefferson</td><td><span class="pill watch">New detention</span></td><td>Assigned for repeated dress-code violations, 2nd offense</td></tr>
-        <tr><td>Nina Okonkwo</td><td><span class="pill urgent">Multiple referrals</span></td><td>3 referrals in 2 weeks for classroom disruption</td></tr>
-        <tr><td>Caleb Whitmore</td><td><span class="pill info">Returning from suspension</span></td><td>Re-entry conference completed this AM</td></tr>
-        <tr><td>Della Fitzgerald</td><td><span class="pill watch">New detention</span></td><td>Assigned for phone-policy violation, 2nd time</td></tr>
-        <tr><td>Simon Achterberg</td><td><span class="pill urgent">Multiple referrals</span></td><td>Repeated tardy-related referrals this month</td></tr>
-        <tr class="group-row"><td colspan="3">10th grade</td></tr>
-        <tr><td>Nate Fielding</td><td><span class="pill watch">New detention</span></td><td>Assigned today for repeated tardiness</td></tr>
-        <tr><td>Priyanka Bose</td><td><span class="pill urgent">Multiple referrals</span></td><td>Hallway conflicts, 3 referrals in 10 days</td></tr>
-        <tr><td>Jaxon Delacroix</td><td><span class="pill info">Returning from suspension</span></td><td>Re-entry conference completed this AM</td></tr>
-        <tr><td>Miriam Solis</td><td><span class="pill watch">New detention</span></td><td>Assigned for dress-code violation</td></tr>
-        <tr><td>Cole Whitaker</td><td><span class="pill urgent">Multiple referrals</span></td><td>Repeated classroom disruption, 3 in 2 weeks</td></tr>
-        <tr class="group-row"><td colspan="3">11th grade</td></tr>
-        <tr><td>Isaiah Cortez</td><td><span class="pill info">Returning from suspension</span></td><td>Re-entry conference completed this AM</td></tr>
-        <tr><td>Beatriz Andrade</td><td><span class="pill urgent">Multiple referrals</span></td><td>Repeated disrespect incidents, 3 in 2 weeks</td></tr>
-        <tr><td>Grant Whitfield</td><td><span class="pill watch">New detention</span></td><td>Assigned for vaping violation, first offense</td></tr>
-        <tr><td>Farrah Osei</td><td><span class="pill urgent">Multiple referrals</span></td><td>Hallway altercation warning plus 2 prior referrals</td></tr>
-        <tr><td>Julian Petrov</td><td><span class="pill info">Returning from suspension</span></td><td>Re-entry conference scheduled this week</td></tr>
-        <tr class="group-row"><td colspan="3">12th grade</td></tr>
-        <tr><td>Camille Ortiz</td><td><span class="pill urgent">Multiple referrals</span></td><td>3 referrals in 2 weeks; team meeting requested</td></tr>
-        <tr><td>Xander Reyes</td><td><span class="pill watch">New detention</span></td><td>Assigned for vaping violation</td></tr>
-        <tr><td>Odalys Marín</td><td><span class="pill info">Returning from suspension</span></td><td>Re-entry conference completed this AM</td></tr>
-        <tr><td>Preston Doyle</td><td><span class="pill urgent">Multiple referrals</span></td><td>Repeated classroom disruption, 3 in 2 weeks</td></tr>
-        <tr><td>Vivian Achebe</td><td><span class="pill watch">New detention</span></td><td>Assigned for repeated dress-code violations</td></tr>
-      </table>
     </div>
 
   </section>
@@ -584,44 +373,65 @@
       </div>
     </div>
 
-    <div class="card" style="margin-bottom:24px;">
-      <h3>Off-track — credits (12th grade)</h3>
-      <table>
-        <tr><th>Student</th><th>Counselor</th><th>Credits earned / needed</th><th>Credit(s) missing</th><th>Action</th><th>Owner</th></tr>
-        <tr><td>Maddox Hale</td><td>Mr. Okonjo</td><td>21 / 24 earned</td><td>English</td><td>Credit-recovery block; tutoring 2x/week with English dept.</td><td>Counselor + Dept. Chair</td></tr>
-        <tr><td>Jamal Whitfield</td><td>Mr. Okonjo</td><td>22 / 24 earned</td><td>Math</td><td>Move to co-taught section; weekly progress monitoring</td><td>Counselor + Math Dept.</td></tr>
-        <tr><td>Tyler Brennan</td><td>Mr. Okonjo</td><td>21.5 / 24 earned</td><td>Science</td><td>Enroll in online credit-recovery course for Science; counselor tracking weekly</td><td>Counselor</td></tr>
-      </table>
+    <div class="section-title" style="margin-top:8px;">Off-track — credits or Menu of Options</div>
+    <div class="tableau-layout">
+      <aside class="filter-sidebar" id="grad-sidebar">
+        <h4>Filters</h4>
+        <div class="filter-group" id="grad-filter-grade"><div class="filter-group-title">Grade</div></div>
+        <div class="filter-group" id="grad-filter-gender"><div class="filter-group-title">Gender</div></div>
+        <div class="filter-group" id="grad-filter-iep"><div class="filter-group-title">IEP Status</div></div>
+        <div class="filter-group" id="grad-filter-ell"><div class="filter-group-title">ELL Status</div></div>
+        <div class="filter-group" id="grad-filter-race"><div class="filter-group-title">Race</div></div>
+        <button class="clear-filters-btn" id="grad-clear">Clear all filters</button>
+      </aside>
+      <div class="tableau-main">
+        <div class="result-count" id="grad-count"></div>
+        <div class="card" style="margin-bottom:18px;">
+          <div class="pie-hint">Click a slice (or legend item) to filter — click again to clear. Ctrl/Shift-click to select multiple.</div>
+          <div class="pie-row" id="grad-pies">
+            <div class="pie-block"><div class="pie" id="grad-pie-gender"></div><div><div style="font-size:12.5px;font-weight:600;color:var(--ink-soft);margin-bottom:6px;">Gender</div><div class="pie-legend" id="grad-legend-gender"></div></div></div>
+            <div class="pie-block"><div class="pie" id="grad-pie-iep"></div><div><div style="font-size:12.5px;font-weight:600;color:var(--ink-soft);margin-bottom:6px;">IEP status</div><div class="pie-legend" id="grad-legend-iep"></div></div></div>
+            <div class="pie-block"><div class="pie" id="grad-pie-ell"></div><div><div style="font-size:12.5px;font-weight:600;color:var(--ink-soft);margin-bottom:6px;">ELL status</div><div class="pie-legend" id="grad-legend-ell"></div></div></div>
+            <div class="pie-block"><div class="pie" id="grad-pie-race"></div><div><div style="font-size:12.5px;font-weight:600;color:var(--ink-soft);margin-bottom:6px;">Race</div><div class="pie-legend" id="grad-legend-race"></div></div></div>
+          </div>
+        </div>
+        <div class="card table-scroll">
+          <table class="check-table" id="grad-table"></table>
+        </div>
+      </div>
     </div>
 
-    <div class="card" style="margin-bottom:24px;">
-      <h3>Off-track — menu of options (12th grade)</h3>
-      <table>
-        <tr><th>Student</th><th>Counselor</th><th>Area</th><th>Missing pathway</th><th>Action</th><th>Owner</th></tr>
-        <tr><td>Camille Ortiz</td><td>Mr. Okonjo</td><td><span class="pill info">English</span></td><td>No qualifying assessment score or alternate pathway demonstrated yet</td><td>English menu-support seminar; register for next test date</td><td>Counselor</td></tr>
-        <tr><td>Priya Chandrasekar</td><td>Mr. Okonjo</td><td><span class="pill info">Math</span></td><td>No qualifying SAT Math benchmark or alternate pathway</td><td>Register for next SAT window; math menu-support block</td><td>Counselor</td></tr>
-        <tr><td>Jamal Whitfield</td><td>Mr. Okonjo</td><td><span class="pill urgent">Both</span></td><td>No qualifying score in English or Math; no alternate demonstrated</td><td>Enroll in concurrent-enrollment course for spring; identify best-fit option with counselor</td><td>Counselor</td></tr>
-      </table>
-    </div>
-
-    <div class="card">
-      <h3>At risk — currently failing a class (12th grade)</h3>
-      <p style="font-size:13px;color:var(--ink-soft);margin-bottom:12px;">Any senior failing a class right now, whether or not they're formally off-track yet — an early-warning net before it becomes a credit deficiency.</p>
-      <table>
-        <tr><th>Student</th><th>Class</th><th>Teacher</th><th>Current grade</th><th>Attendance in class</th></tr>
-        <tr><td>Maddox Hale</td><td>English 12</td><td>Ms. Delacroix</td><td>54%</td><td>78%</td></tr>
-        <tr><td>Jamal Whitfield</td><td>Algebra II</td><td>Mr. Feld</td><td>49%</td><td>71%</td></tr>
-        <tr><td>Jamal Whitfield</td><td>Physics</td><td>Mr. Doyle</td><td>58%</td><td>75%</td></tr>
-        <tr><td>Jamal Whitfield</td><td>English 12</td><td>Ms. Delacroix</td><td>52%</td><td>73%</td></tr>
-        <tr><td>Tyler Brennan</td><td>Chemistry</td><td>Dr. Whitson</td><td>58%</td><td>80%</td></tr>
-        <tr><td>Camille Ortiz</td><td>Economics</td><td>Ms. Paulsen</td><td>55%</td><td>82%</td></tr>
-        <tr><td>Priya Chandrasekar</td><td>Physics</td><td>Mr. Doyle</td><td>59%</td><td>85%</td></tr>
-        <tr><td>Owen Castellanos</td><td>Spanish IV</td><td>Ms. Reyes</td><td>57%</td><td>79%</td></tr>
-      </table>
+    <div class="section-title" style="margin-top:28px;">At risk — currently failing a class</div>
+    <p style="font-size:13px;color:var(--ink-soft);margin-top:-8px;margin-bottom:14px;">Any senior failing a class right now, whether or not they're formally off-track yet — an early-warning net before it becomes a credit deficiency.</p>
+    <div class="tableau-layout">
+      <aside class="filter-sidebar" id="risk-sidebar">
+        <h4>Filters</h4>
+        <div class="filter-group" id="risk-filter-grade"><div class="filter-group-title">Grade</div></div>
+        <div class="filter-group" id="risk-filter-gender"><div class="filter-group-title">Gender</div></div>
+        <div class="filter-group" id="risk-filter-iep"><div class="filter-group-title">IEP Status</div></div>
+        <div class="filter-group" id="risk-filter-ell"><div class="filter-group-title">ELL Status</div></div>
+        <div class="filter-group" id="risk-filter-race"><div class="filter-group-title">Race</div></div>
+        <button class="clear-filters-btn" id="risk-clear">Clear all filters</button>
+      </aside>
+      <div class="tableau-main">
+        <div class="result-count" id="risk-count"></div>
+        <div class="card" style="margin-bottom:18px;">
+          <div class="pie-hint">Click a slice (or legend item) to filter — click again to clear. Ctrl/Shift-click to select multiple.</div>
+          <div class="pie-row" id="risk-pies">
+            <div class="pie-block"><div class="pie" id="risk-pie-gender"></div><div><div style="font-size:12.5px;font-weight:600;color:var(--ink-soft);margin-bottom:6px;">Gender</div><div class="pie-legend" id="risk-legend-gender"></div></div></div>
+            <div class="pie-block"><div class="pie" id="risk-pie-iep"></div><div><div style="font-size:12.5px;font-weight:600;color:var(--ink-soft);margin-bottom:6px;">IEP status</div><div class="pie-legend" id="risk-legend-iep"></div></div></div>
+            <div class="pie-block"><div class="pie" id="risk-pie-ell"></div><div><div style="font-size:12.5px;font-weight:600;color:var(--ink-soft);margin-bottom:6px;">ELL status</div><div class="pie-legend" id="risk-legend-ell"></div></div></div>
+            <div class="pie-block"><div class="pie" id="risk-pie-race"></div><div><div style="font-size:12.5px;font-weight:600;color:var(--ink-soft);margin-bottom:6px;">Race</div><div class="pie-legend" id="risk-legend-race"></div></div></div>
+          </div>
+        </div>
+        <div class="card table-scroll">
+          <table class="check-table" id="risk-table"></table>
+        </div>
+      </div>
     </div>
 
     <div class="footnote">
-      Mockup data is entirely fictional. In production, this detail should pull from the student information system's credit-audit and Menu of Options tracking, restricted to counselors and administrators with a documented legitimate educational interest, consistent with FERPA and Colorado student data privacy requirements. Owen Castellanos appears only on the at-risk list — a student not yet formally off-track but flagged early because of a currently failing grade. Others (e.g. Jamal Whitfield) appear on multiple lists, which reflects a real student facing more than one issue at once.
+      Mockup data is entirely fictional. In production, this detail should pull from the student information system's credit-audit and Menu of Options tracking, restricted to counselors and administrators with a documented legitimate educational interest, consistent with FERPA and Colorado student data privacy requirements. Students can appear on both lists, which reflects a real student facing more than one issue at once.
     </div>
   </section>
 
@@ -715,78 +525,405 @@ function renderAttentionTable(){
 }
 renderAttentionTable();
 
-// ---- Pie chart helper ----
-function renderPie(circleId, legendId, data){
-  const total = data.reduce((s,d)=>s+d.value,0);
+// ---- Pie chart helper (SVG, clickable slices act as filters; ctrl/shift-click for multi-select) ----
+function renderPie(pieDivId, legendId, data, onSliceClick, selectedSet, isFiltered){
+  const size = 130, cx = size/2, cy = size/2, r = size/2 - 3;
+  const total = data.reduce((s,d)=>s+d.value,0) || 1;
+  const svgNS = 'http://www.w3.org/2000/svg';
+  const container = document.getElementById(pieDivId);
+  if(!container) return;
+  container.innerHTML = '';
+  const svg = document.createElementNS(svgNS,'svg');
+  svg.setAttribute('width', size); svg.setAttribute('height', size); svg.setAttribute('viewBox', `0 0 ${size} ${size}`);
+
   let cumulative = 0;
-  const stops = data.map(d=>{
-    const start = (cumulative/total*360).toFixed(2);
+  data.forEach(d=>{
+    const startAngle = (cumulative/total)*2*Math.PI - Math.PI/2;
     cumulative += d.value;
-    const end = (cumulative/total*360).toFixed(2);
-    return `${d.color} ${start}deg ${end}deg`;
-  }).join(', ');
-  const circle = document.getElementById(circleId);
-  if(circle) circle.style.background = `conic-gradient(${stops})`;
+    const endAngle = (cumulative/total)*2*Math.PI - Math.PI/2;
+    const x1 = cx + r*Math.cos(startAngle), y1 = cy + r*Math.sin(startAngle);
+    const x2 = cx + r*Math.cos(endAngle), y2 = cy + r*Math.sin(endAngle);
+    const largeArc = (endAngle - startAngle) > Math.PI ? 1 : 0;
+    const path = document.createElementNS(svgNS,'path');
+    const isFullCircle = data.length === 1;
+    const dCmd = isFullCircle
+      ? `M ${cx},${cy-r} A ${r},${r} 0 1,1 ${(cx-0.01).toFixed(3)},${cy-r} Z`
+      : `M ${cx},${cy} L ${x1.toFixed(3)},${y1.toFixed(3)} A ${r},${r} 0 ${largeArc} 1 ${x2.toFixed(3)},${y2.toFixed(3)} Z`;
+    path.setAttribute('d', dCmd);
+    path.setAttribute('fill', d.color);
+    path.setAttribute('stroke', '#FFFFFF');
+    const isActive = isFiltered && selectedSet && selectedSet.has(d.label);
+    const isDimmed = isFiltered && !isActive;
+    path.setAttribute('stroke-width', isActive ? '2.5' : '1.5');
+    path.style.opacity = isDimmed ? '0.35' : '1';
+    if(onSliceClick){
+      path.style.cursor = 'pointer';
+      path.addEventListener('click', (e)=> onSliceClick(d.label, e));
+    }
+    svg.appendChild(path);
+  });
+  container.appendChild(svg);
+
   const legend = document.getElementById(legendId);
   if(legend){
-    legend.innerHTML = data.map(d=>
-      `<div class="legend-row"><span class="legend-dot" style="background:${d.color}"></span>${d.label}<strong>${d.value}%</strong></div>`
-    ).join('');
+    legend.innerHTML = data.map(d=>{
+      const isActive = isFiltered && selectedSet && selectedSet.has(d.label);
+      return `<div class="legend-row${isActive?' legend-active':''}" ${onSliceClick?`data-clickval="${d.label.replace(/"/g,'&quot;')}"`:''} style="${onSliceClick?'cursor:pointer;':''}"><span class="legend-dot" style="background:${d.color}"></span>${d.label}<strong>${d.value}%</strong></div>`;
+    }).join('');
+    if(onSliceClick){
+      legend.querySelectorAll('.legend-row').forEach(row=>{
+        row.addEventListener('click', (e)=> onSliceClick(row.dataset.clickval, e));
+      });
+    }
   }
 }
 
 const DEMO_COLORS = ['#1F4B5F','#B98A3E','#B4423F','#3F7D58','#3E6E8E','#8B98A5'];
 
-renderPie('pie-present', 'legend-present', [
-  {label:'Hispanic/Latino', value:41, color:DEMO_COLORS[0]},
-  {label:'White', value:39, color:DEMO_COLORS[1]},
-  {label:'Black/African American', value:10, color:DEMO_COLORS[2]},
-  {label:'Asian', value:5, color:DEMO_COLORS[3]},
-  {label:'Two or More Races', value:4, color:DEMO_COLORS[4]},
-  {label:'Amer. Indian/Alaska Native', value:1, color:DEMO_COLORS[5]},
+const chronicAbsData = [
+  {"name":"Selena Reyes","grade":"11th","gender":"Female","iep":"Yes","ell":"No","race":"Hispanic/Latino","counselor":"Ms. Alvarado","attendance":"79%","daysAbsent":10,"note":"Home visit completed by attendance team"},
+  {"name":"Isaiah Ostrowski","grade":"11th","gender":"Male","iep":"No","ell":"No","race":"White","counselor":"Ms. Alvarado","attendance":"81%","daysAbsent":9,"note":"Monitoring after transportation issue resolved"},
+  {"name":"Tobias Mbeki","grade":"9th","gender":"Male","iep":"No","ell":"Yes","race":"Hispanic/Latino","counselor":"Ms. Whitcombe","attendance":"63%","daysAbsent":18,"note":"Attendance contract in place with family"},
+  {"name":"Renata Michaels","grade":"9th","gender":"Female","iep":"No","ell":"No","race":"Black/African American","counselor":"Ms. Whitcombe","attendance":"70%","daysAbsent":15,"note":"Chronic illness documentation pending"},
+  {"name":"Elias Marín","grade":"11th","gender":"Male","iep":"No","ell":"No","race":"Hispanic/Latino","counselor":"Ms. Alvarado","attendance":"70%","daysAbsent":15,"note":"Truancy mediation meeting scheduled"},
+  {"name":"Bianca Bergman","grade":"10th","gender":"Female","iep":"No","ell":"Yes","race":"White","counselor":"Mr. Kim","attendance":"81%","daysAbsent":9,"note":"Counselor check-in scheduled this week"},
+  {"name":"Mia Nguyen","grade":"10th","gender":"Female","iep":"No","ell":"Yes","race":"Hispanic/Latino","counselor":"Mr. Kim","attendance":"62%","daysAbsent":19,"note":"Truancy referral submitted"},
+  {"name":"Tariq Paulsen","grade":"9th","gender":"Male","iep":"No","ell":"No","race":"Hispanic/Latino","counselor":"Ms. Whitcombe","attendance":"81%","daysAbsent":9,"note":"Family engagement meeting scheduled"},
+  {"name":"Leo Hale","grade":"12th","gender":"Male","iep":"No","ell":"No","race":"White","counselor":"Mr. Okonjo","attendance":"78%","daysAbsent":10,"note":"Truancy referral submitted"},
+  {"name":"Harper Brennan","grade":"10th","gender":"Female","iep":"No","ell":"No","race":"White","counselor":"Mr. Kim","attendance":"89%","daysAbsent":5,"note":"Home visit completed by attendance team"},
+  {"name":"Jaxon McAllister","grade":"9th","gender":"Male","iep":"No","ell":"No","race":"Black/African American","counselor":"Ms. Whitcombe","attendance":"87%","daysAbsent":6,"note":"Family engagement meeting scheduled"},
+  {"name":"Leo Kim","grade":"9th","gender":"Male","iep":"No","ell":"No","race":"Hispanic/Latino","counselor":"Ms. Whitcombe","attendance":"73%","daysAbsent":13,"note":"Family engagement meeting scheduled"},
+  {"name":"Harper Bergman","grade":"11th","gender":"Female","iep":"No","ell":"No","race":"Black/African American","counselor":"Ms. Alvarado","attendance":"73%","daysAbsent":13,"note":"Family engagement meeting scheduled"},
+  {"name":"Nadia Nakamura","grade":"11th","gender":"Female","iep":"No","ell":"No","race":"Asian","counselor":"Ms. Alvarado","attendance":"67%","daysAbsent":16,"note":"Monitoring after transportation issue resolved"},
+  {"name":"Cole Lindqvist","grade":"11th","gender":"Male","iep":"No","ell":"No","race":"Hispanic/Latino","counselor":"Ms. Alvarado","attendance":"71%","daysAbsent":14,"note":"Attendance letter sent home"},
+  {"name":"Theo Achebe","grade":"12th","gender":"Male","iep":"Yes","ell":"No","race":"White","counselor":"Mr. Okonjo","attendance":"70%","daysAbsent":15,"note":"Chronic illness documentation pending"},
+  {"name":"Dominic Delgado","grade":"10th","gender":"Male","iep":"No","ell":"No","race":"Hispanic/Latino","counselor":"Mr. Kim","attendance":"75%","daysAbsent":12,"note":"Monitoring after transportation issue resolved"},
+  {"name":"Marisol Hoffmann","grade":"10th","gender":"Female","iep":"No","ell":"No","race":"White","counselor":"Mr. Kim","attendance":"68%","daysAbsent":16,"note":"Family engagement meeting scheduled"},
+  {"name":"Della Hale","grade":"10th","gender":"Female","iep":"Yes","ell":"No","race":"Hispanic/Latino","counselor":"Mr. Kim","attendance":"75%","daysAbsent":12,"note":"Chronic illness documentation pending"},
+  {"name":"Paloma Bianchi","grade":"10th","gender":"Female","iep":"Yes","ell":"No","race":"White","counselor":"Mr. Kim","attendance":"85%","daysAbsent":7,"note":"Home visit completed by attendance team"},
+  {"name":"Owen Whitcomb","grade":"12th","gender":"Male","iep":"No","ell":"No","race":"White","counselor":"Mr. Okonjo","attendance":"89%","daysAbsent":5,"note":"Attendance improvement plan started"},
+  {"name":"Luna Castellanos","grade":"9th","gender":"Female","iep":"Yes","ell":"No","race":"White","counselor":"Ms. Whitcombe","attendance":"80%","daysAbsent":9,"note":"Truancy mediation meeting scheduled"},
+  {"name":"Jasmine Fontaine","grade":"12th","gender":"Female","iep":"No","ell":"No","race":"Hispanic/Latino","counselor":"Mr. Okonjo","attendance":"74%","daysAbsent":12,"note":"Home visit completed by attendance team"},
+  {"name":"Lily Nguyen","grade":"11th","gender":"Female","iep":"No","ell":"No","race":"Hispanic/Latino","counselor":"Ms. Alvarado","attendance":"72%","daysAbsent":13,"note":"Attendance letter sent home"},
+  {"name":"Gabriel Brennan","grade":"12th","gender":"Male","iep":"No","ell":"No","race":"White","counselor":"Mr. Okonjo","attendance":"66%","daysAbsent":17,"note":"Truancy referral submitted"},
+  {"name":"Elias Delacroix","grade":"10th","gender":"Male","iep":"No","ell":"No","race":"Black/African American","counselor":"Mr. Kim","attendance":"83%","daysAbsent":8,"note":"Attendance contract in place with family"},
+  {"name":"Bianca Fitzgerald","grade":"10th","gender":"Female","iep":"No","ell":"No","race":"Hispanic/Latino","counselor":"Mr. Kim","attendance":"70%","daysAbsent":15,"note":"Family engagement meeting scheduled"},
+  {"name":"Nate Andrade","grade":"11th","gender":"Male","iep":"No","ell":"No","race":"Hispanic/Latino","counselor":"Ms. Alvarado","attendance":"62%","daysAbsent":19,"note":"Family engagement meeting scheduled"},
+  {"name":"Layla Bostwick","grade":"10th","gender":"Female","iep":"No","ell":"Yes","race":"Black/African American","counselor":"Mr. Kim","attendance":"63%","daysAbsent":18,"note":"Chronic illness documentation pending"},
+  {"name":"Emmett Achebe","grade":"9th","gender":"Male","iep":"No","ell":"No","race":"White","counselor":"Ms. Whitcombe","attendance":"84%","daysAbsent":7,"note":"Monitoring after transportation issue resolved"},
+  {"name":"Renata Doyle","grade":"9th","gender":"Female","iep":"Yes","ell":"Yes","race":"Hispanic/Latino","counselor":"Ms. Whitcombe","attendance":"80%","daysAbsent":9,"note":"Counselor check-in scheduled this week"},
+  {"name":"Valentina Okafor","grade":"10th","gender":"Female","iep":"No","ell":"No","race":"Black/African American","counselor":"Mr. Kim","attendance":"77%","daysAbsent":11,"note":"Attendance contract in place with family"},
+  {"name":"Stella Rourke","grade":"11th","gender":"Female","iep":"No","ell":"No","race":"White","counselor":"Ms. Alvarado","attendance":"77%","daysAbsent":11,"note":"Truancy mediation meeting scheduled"},
+  {"name":"Malik Cruz","grade":"11th","gender":"Male","iep":"No","ell":"No","race":"White","counselor":"Ms. Alvarado","attendance":"89%","daysAbsent":5,"note":"Improved past 2 weeks, continued monitoring"},
+  {"name":"Della Fontaine","grade":"11th","gender":"Female","iep":"No","ell":"No","race":"Black/African American","counselor":"Ms. Alvarado","attendance":"70%","daysAbsent":15,"note":"Home visit completed by attendance team"},
+  {"name":"Andre Andrade","grade":"12th","gender":"Male","iep":"No","ell":"No","race":"White","counselor":"Mr. Okonjo","attendance":"66%","daysAbsent":17,"note":"Truancy referral submitted"},
+  {"name":"Grace Vance","grade":"11th","gender":"Female","iep":"No","ell":"No","race":"White","counselor":"Ms. Alvarado","attendance":"67%","daysAbsent":16,"note":"Home visit completed by attendance team"},
+  {"name":"Camille Bose","grade":"9th","gender":"Female","iep":"No","ell":"No","race":"White","counselor":"Ms. Whitcombe","attendance":"73%","daysAbsent":13,"note":"Chronic illness documentation pending"},
+  {"name":"Elena Whitaker","grade":"9th","gender":"Female","iep":"Yes","ell":"Yes","race":"Hispanic/Latino","counselor":"Ms. Whitcombe","attendance":"72%","daysAbsent":13,"note":"Home visit completed by attendance team"},
+  {"name":"Daniela Alvez","grade":"9th","gender":"Female","iep":"No","ell":"No","race":"Hispanic/Latino","counselor":"Ms. Whitcombe","attendance":"85%","daysAbsent":7,"note":"Monitoring after transportation issue resolved"},
+  {"name":"Nora Reyes","grade":"9th","gender":"Female","iep":"No","ell":"No","race":"White","counselor":"Ms. Whitcombe","attendance":"69%","daysAbsent":15,"note":"Attendance contract in place with family"},
+  {"name":"Bianca Delacroix","grade":"11th","gender":"Female","iep":"Yes","ell":"No","race":"White","counselor":"Ms. Alvarado","attendance":"87%","daysAbsent":6,"note":"Family engagement meeting scheduled"},
+  {"name":"Noah Reyes","grade":"9th","gender":"Male","iep":"No","ell":"No","race":"White","counselor":"Ms. Whitcombe","attendance":"85%","daysAbsent":7,"note":"Truancy referral submitted"},
+  {"name":"Sophie Castellanos","grade":"12th","gender":"Female","iep":"No","ell":"No","race":"Black/African American","counselor":"Mr. Okonjo","attendance":"76%","daysAbsent":11,"note":"Family engagement meeting scheduled"},
+  {"name":"Ivan Okonkwo","grade":"12th","gender":"Male","iep":"No","ell":"No","race":"Two or More Races","counselor":"Mr. Okonjo","attendance":"66%","daysAbsent":17,"note":"Family engagement meeting scheduled"}
+];
+
+const failingData = [
+  {"name":"Camila Bergman","grade":"12th","gender":"Female","iep":"No","ell":"Yes","race":"White","counselor":"Mr. Okonjo","classesFailing":2,"lastWeek":1,"twoWeeksAgo":1},
+  {"name":"Renata Castellanos","grade":"9th","gender":"Female","iep":"No","ell":"No","race":"Hispanic/Latino","counselor":"Ms. Whitcombe","classesFailing":2,"lastWeek":2,"twoWeeksAgo":1},
+  {"name":"Farrah Hartley","grade":"10th","gender":"Female","iep":"Yes","ell":"No","race":"White","counselor":"Mr. Kim","classesFailing":2,"lastWeek":1,"twoWeeksAgo":1},
+  {"name":"Theo Bergman","grade":"10th","gender":"Male","iep":"No","ell":"No","race":"White","counselor":"Mr. Kim","classesFailing":2,"lastWeek":2,"twoWeeksAgo":1},
+  {"name":"Lily Bergman","grade":"11th","gender":"Female","iep":"No","ell":"No","race":"White","counselor":"Ms. Alvarado","classesFailing":2,"lastWeek":2,"twoWeeksAgo":2},
+  {"name":"Nadia Jefferson","grade":"10th","gender":"Female","iep":"No","ell":"Yes","race":"White","counselor":"Mr. Kim","classesFailing":2,"lastWeek":1,"twoWeeksAgo":0},
+  {"name":"Jasmine Fielding","grade":"11th","gender":"Female","iep":"No","ell":"No","race":"White","counselor":"Ms. Alvarado","classesFailing":2,"lastWeek":2,"twoWeeksAgo":1},
+  {"name":"Emmett Nakamura","grade":"11th","gender":"Male","iep":"Yes","ell":"No","race":"White","counselor":"Ms. Alvarado","classesFailing":3,"lastWeek":3,"twoWeeksAgo":2},
+  {"name":"Fernanda Lindqvist","grade":"11th","gender":"Female","iep":"No","ell":"No","race":"White","counselor":"Ms. Alvarado","classesFailing":3,"lastWeek":3,"twoWeeksAgo":2},
+  {"name":"Stella Mbeki","grade":"10th","gender":"Female","iep":"Yes","ell":"No","race":"Hispanic/Latino","counselor":"Mr. Kim","classesFailing":2,"lastWeek":2,"twoWeeksAgo":1},
+  {"name":"Talia Reyes","grade":"11th","gender":"Female","iep":"No","ell":"No","race":"Two or More Races","counselor":"Ms. Alvarado","classesFailing":3,"lastWeek":2,"twoWeeksAgo":1},
+  {"name":"Marcus Okonjo","grade":"9th","gender":"Male","iep":"No","ell":"No","race":"White","counselor":"Ms. Whitcombe","classesFailing":3,"lastWeek":3,"twoWeeksAgo":2},
+  {"name":"Quinn Ashworth","grade":"10th","gender":"Male","iep":"Yes","ell":"No","race":"White","counselor":"Mr. Kim","classesFailing":2,"lastWeek":2,"twoWeeksAgo":2},
+  {"name":"Nadia Fontaine","grade":"12th","gender":"Female","iep":"No","ell":"No","race":"White","counselor":"Mr. Okonjo","classesFailing":2,"lastWeek":1,"twoWeeksAgo":0},
+  {"name":"Xander Paulsen","grade":"10th","gender":"Male","iep":"No","ell":"No","race":"White","counselor":"Mr. Kim","classesFailing":2,"lastWeek":2,"twoWeeksAgo":2},
+  {"name":"Nina Nwosu","grade":"9th","gender":"Female","iep":"No","ell":"No","race":"White","counselor":"Ms. Whitcombe","classesFailing":2,"lastWeek":1,"twoWeeksAgo":1},
+  {"name":"Nina Alvarado","grade":"9th","gender":"Female","iep":"No","ell":"No","race":"White","counselor":"Ms. Whitcombe","classesFailing":2,"lastWeek":1,"twoWeeksAgo":0},
+  {"name":"Ava Fielding","grade":"9th","gender":"Female","iep":"No","ell":"Yes","race":"Hispanic/Latino","counselor":"Ms. Whitcombe","classesFailing":2,"lastWeek":2,"twoWeeksAgo":1},
+  {"name":"Ava Marchetti","grade":"12th","gender":"Female","iep":"No","ell":"No","race":"White","counselor":"Mr. Okonjo","classesFailing":2,"lastWeek":2,"twoWeeksAgo":1},
+  {"name":"Luna Boone","grade":"10th","gender":"Female","iep":"No","ell":"No","race":"White","counselor":"Mr. Kim","classesFailing":2,"lastWeek":2,"twoWeeksAgo":1},
+  {"name":"Vivian Rivera","grade":"12th","gender":"Female","iep":"No","ell":"No","race":"Hispanic/Latino","counselor":"Mr. Okonjo","classesFailing":2,"lastWeek":1,"twoWeeksAgo":0},
+  {"name":"Lily Whitson","grade":"11th","gender":"Female","iep":"No","ell":"No","race":"Hispanic/Latino","counselor":"Ms. Alvarado","classesFailing":2,"lastWeek":1,"twoWeeksAgo":1},
+  {"name":"Sophie Osei","grade":"11th","gender":"Female","iep":"No","ell":"No","race":"Two or More Races","counselor":"Ms. Alvarado","classesFailing":2,"lastWeek":1,"twoWeeksAgo":1},
+  {"name":"Sawyer Silva","grade":"10th","gender":"Male","iep":"No","ell":"No","race":"Hispanic/Latino","counselor":"Mr. Kim","classesFailing":2,"lastWeek":2,"twoWeeksAgo":2},
+  {"name":"Caleb Paulsen","grade":"11th","gender":"Male","iep":"No","ell":"No","race":"White","counselor":"Ms. Alvarado","classesFailing":3,"lastWeek":3,"twoWeeksAgo":2},
+  {"name":"Xander Ashworth","grade":"11th","gender":"Male","iep":"No","ell":"No","race":"Hispanic/Latino","counselor":"Ms. Alvarado","classesFailing":3,"lastWeek":3,"twoWeeksAgo":3},
+  {"name":"Julian Osei","grade":"10th","gender":"Male","iep":"Yes","ell":"No","race":"White","counselor":"Mr. Kim","classesFailing":2,"lastWeek":1,"twoWeeksAgo":1},
+  {"name":"Miles Reyes","grade":"10th","gender":"Male","iep":"No","ell":"No","race":"Black/African American","counselor":"Mr. Kim","classesFailing":2,"lastWeek":2,"twoWeeksAgo":2},
+  {"name":"Luna Park","grade":"10th","gender":"Female","iep":"Yes","ell":"No","race":"White","counselor":"Mr. Kim","classesFailing":3,"lastWeek":2,"twoWeeksAgo":2},
+  {"name":"Diego Paulsen","grade":"11th","gender":"Male","iep":"Yes","ell":"Yes","race":"Black/African American","counselor":"Ms. Alvarado","classesFailing":2,"lastWeek":2,"twoWeeksAgo":2},
+  {"name":"Valentina Andrade","grade":"11th","gender":"Female","iep":"No","ell":"No","race":"Black/African American","counselor":"Ms. Alvarado","classesFailing":2,"lastWeek":2,"twoWeeksAgo":1},
+  {"name":"Emmett Petrov","grade":"10th","gender":"Male","iep":"No","ell":"No","race":"Hispanic/Latino","counselor":"Mr. Kim","classesFailing":2,"lastWeek":1,"twoWeeksAgo":0},
+  {"name":"Xander Delacroix","grade":"11th","gender":"Male","iep":"No","ell":"No","race":"Hispanic/Latino","counselor":"Ms. Alvarado","classesFailing":4,"lastWeek":4,"twoWeeksAgo":4},
+  {"name":"Owen Lindqvist","grade":"9th","gender":"Male","iep":"No","ell":"No","race":"White","counselor":"Ms. Whitcombe","classesFailing":2,"lastWeek":2,"twoWeeksAgo":1},
+  {"name":"Yasmin Sandoval","grade":"11th","gender":"Female","iep":"No","ell":"No","race":"Hispanic/Latino","counselor":"Ms. Alvarado","classesFailing":2,"lastWeek":1,"twoWeeksAgo":1},
+  {"name":"Rafael Lindqvist","grade":"12th","gender":"Male","iep":"No","ell":"Yes","race":"White","counselor":"Mr. Okonjo","classesFailing":3,"lastWeek":3,"twoWeeksAgo":2},
+  {"name":"Silas Fitzgerald","grade":"10th","gender":"Male","iep":"Yes","ell":"No","race":"Hispanic/Latino","counselor":"Mr. Kim","classesFailing":2,"lastWeek":2,"twoWeeksAgo":2},
+  {"name":"Silas Ferreira","grade":"9th","gender":"Male","iep":"Yes","ell":"No","race":"White","counselor":"Ms. Whitcombe","classesFailing":3,"lastWeek":2,"twoWeeksAgo":1},
+  {"name":"Farrah Tran","grade":"11th","gender":"Female","iep":"No","ell":"No","race":"Hispanic/Latino","counselor":"Ms. Alvarado","classesFailing":3,"lastWeek":2,"twoWeeksAgo":1},
+  {"name":"Julian Nakamura","grade":"12th","gender":"Male","iep":"No","ell":"No","race":"Hispanic/Latino","counselor":"Mr. Okonjo","classesFailing":2,"lastWeek":1,"twoWeeksAgo":0},
+  {"name":"Milo Silva","grade":"11th","gender":"Male","iep":"No","ell":"Yes","race":"Hispanic/Latino","counselor":"Ms. Alvarado","classesFailing":3,"lastWeek":2,"twoWeeksAgo":1},
+  {"name":"Noah Bianchi","grade":"9th","gender":"Male","iep":"No","ell":"No","race":"Two or More Races","counselor":"Ms. Whitcombe","classesFailing":3,"lastWeek":2,"twoWeeksAgo":2},
+  {"name":"Grant Souza","grade":"11th","gender":"Male","iep":"No","ell":"No","race":"White","counselor":"Ms. Alvarado","classesFailing":2,"lastWeek":2,"twoWeeksAgo":1},
+  {"name":"Amara Jefferson","grade":"12th","gender":"Female","iep":"No","ell":"No","race":"Hispanic/Latino","counselor":"Mr. Okonjo","classesFailing":3,"lastWeek":3,"twoWeeksAgo":3},
+  {"name":"Talia Marín","grade":"10th","gender":"Female","iep":"No","ell":"No","race":"Hispanic/Latino","counselor":"Mr. Kim","classesFailing":3,"lastWeek":3,"twoWeeksAgo":2},
+  {"name":"Bella Bostwick","grade":"12th","gender":"Female","iep":"No","ell":"No","race":"Hispanic/Latino","counselor":"Mr. Okonjo","classesFailing":2,"lastWeek":1,"twoWeeksAgo":1},
+  {"name":"Silas Rivera","grade":"10th","gender":"Male","iep":"No","ell":"No","race":"Hispanic/Latino","counselor":"Mr. Kim","classesFailing":2,"lastWeek":1,"twoWeeksAgo":1},
+  {"name":"Jonah Reyes","grade":"11th","gender":"Male","iep":"No","ell":"No","race":"Hispanic/Latino","counselor":"Ms. Alvarado","classesFailing":3,"lastWeek":2,"twoWeeksAgo":2},
+  {"name":"Nate Okoro","grade":"10th","gender":"Male","iep":"No","ell":"Yes","race":"White","counselor":"Mr. Kim","classesFailing":2,"lastWeek":2,"twoWeeksAgo":2},
+  {"name":"Mia Castellanos","grade":"11th","gender":"Female","iep":"No","ell":"No","race":"White","counselor":"Ms. Alvarado","classesFailing":2,"lastWeek":2,"twoWeeksAgo":1},
+  {"name":"Freya Ashworth","grade":"10th","gender":"Female","iep":"No","ell":"No","race":"American Indian/Alaska Native","counselor":"Mr. Kim","classesFailing":2,"lastWeek":2,"twoWeeksAgo":2},
+  {"name":"Aiden Sandoval","grade":"9th","gender":"Male","iep":"No","ell":"No","race":"White","counselor":"Ms. Whitcombe","classesFailing":4,"lastWeek":3,"twoWeeksAgo":2}
+];
+
+const planData = [
+  {"name":"Bianca Kingsley","grade":"12th","gender":"Female","iep":"No","ell":"Yes","race":"White","counselor":"Mr. Okonjo","planType":"Behavior plan","adminAction":"Daily morning check-in with counselor; review incident log weekly.","nextReview":"Sept 28"},
+  {"name":"Jamal Chandrasekar","grade":"10th","gender":"Male","iep":"No","ell":"No","race":"White","counselor":"Mr. Kim","planType":"Safety plan","adminAction":"Front office notified of daily arrival/dismissal; family check-in weekly.","nextReview":"Sept 21"},
+  {"name":"Nadia Rourke","grade":"9th","gender":"Female","iep":"No","ell":"No","race":"Asian","counselor":"Ms. Whitcombe","planType":"Behavior plan","adminAction":"Weekly progress note to counselor; positive behavior contract in place.","nextReview":"Sept 26"},
+  {"name":"Odalys Ostrowski","grade":"12th","gender":"Female","iep":"No","ell":"No","race":"White","counselor":"Mr. Okonjo","planType":"Safety plan","adminAction":"No unsupervised contact with a named peer group; monitor during passing periods.","nextReview":"Sept 31"},
+  {"name":"Mia Bostwick","grade":"11th","gender":"Female","iep":"No","ell":"No","race":"Hispanic/Latino","counselor":"Ms. Alvarado","planType":"Safety plan","adminAction":"No unsupervised contact with a named peer group; monitor during passing periods.","nextReview":"Sept 25"},
+  {"name":"Willa Okoro","grade":"11th","gender":"Female","iep":"Yes","ell":"No","race":"Two or More Races","counselor":"Ms. Alvarado","planType":"Safety plan","adminAction":"No unsupervised contact with a named peer group; monitor during passing periods.","nextReview":"Sept 25"},
+  {"name":"Marcus Bostwick","grade":"10th","gender":"Male","iep":"No","ell":"No","race":"White","counselor":"Mr. Kim","planType":"Behavior plan","adminAction":"Weekly progress note to counselor; positive behavior contract in place.","nextReview":"Sept 20"},
+  {"name":"Oscar Okonjo","grade":"11th","gender":"Male","iep":"No","ell":"No","race":"Hispanic/Latino","counselor":"Ms. Alvarado","planType":"Behavior plan","adminAction":"Daily lunch check-in; monitor cafeteria behavior log with supervisor.","nextReview":"Sept 26"},
+  {"name":"Malik Bose","grade":"10th","gender":"Male","iep":"No","ell":"No","race":"White","counselor":"Mr. Kim","planType":"Safety plan","adminAction":"No unsupervised contact with a named peer group; monitor during passing periods.","nextReview":"Sept 19"},
+  {"name":"Diego Bostwick","grade":"9th","gender":"Male","iep":"No","ell":"No","race":"Hispanic/Latino","counselor":"Ms. Whitcombe","planType":"Behavior plan","adminAction":"Daily lunch check-in; monitor cafeteria behavior log with supervisor.","nextReview":"Sept 18"},
+  {"name":"Fernanda Hoffmann","grade":"11th","gender":"Female","iep":"No","ell":"No","race":"Black/African American","counselor":"Ms. Alvarado","planType":"Safety plan","adminAction":"Escorted hallway transitions between periods; substitute teachers notified in advance.","nextReview":"Sept 18"},
+  {"name":"Iris Andrade","grade":"9th","gender":"Female","iep":"No","ell":"No","race":"Black/African American","counselor":"Ms. Whitcombe","planType":"Behavior plan","adminAction":"Daily morning check-in with counselor; review incident log weekly.","nextReview":"Sept 22"},
+  {"name":"Freya Castellanos","grade":"12th","gender":"Female","iep":"No","ell":"No","race":"Asian","counselor":"Mr. Okonjo","planType":"Safety plan","adminAction":"Front office notified of daily arrival/dismissal; family check-in weekly.","nextReview":"Sept 23"},
+  {"name":"Elias Solis","grade":"11th","gender":"Male","iep":"No","ell":"No","race":"Two or More Races","counselor":"Ms. Alvarado","planType":"Safety plan","adminAction":"Front office notified of daily arrival/dismissal; family check-in weekly.","nextReview":"Sept 21"},
+  {"name":"Layla McAllister","grade":"11th","gender":"Female","iep":"No","ell":"No","race":"White","counselor":"Ms. Alvarado","planType":"Safety plan","adminAction":"Front office notified of daily arrival/dismissal; family check-in weekly.","nextReview":"Sept 31"},
+  {"name":"Luna Petrakis","grade":"12th","gender":"Female","iep":"No","ell":"No","race":"Hispanic/Latino","counselor":"Mr. Okonjo","planType":"Behavior plan","adminAction":"Weekly progress note to counselor; positive behavior contract in place.","nextReview":"Sept 28"},
+  {"name":"Aiden Silva","grade":"12th","gender":"Male","iep":"No","ell":"Yes","race":"Hispanic/Latino","counselor":"Mr. Okonjo","planType":"Behavior plan","adminAction":"Daily first-period check-in; de-escalation plan on file with front office.","nextReview":"Sept 31"},
+  {"name":"Andre Paulsen","grade":"11th","gender":"Male","iep":"No","ell":"No","race":"Hispanic/Latino","counselor":"Ms. Alvarado","planType":"Behavior plan","adminAction":"Daily first-period check-in; de-escalation plan on file with front office.","nextReview":"Sept 27"},
+  {"name":"Kayla Tran","grade":"11th","gender":"Female","iep":"No","ell":"No","race":"Hispanic/Latino","counselor":"Ms. Alvarado","planType":"Behavior plan","adminAction":"Daily first-period check-in; de-escalation plan on file with front office.","nextReview":"Sept 20"},
+  {"name":"Kayla Reyes","grade":"12th","gender":"Female","iep":"No","ell":"No","race":"Hispanic/Latino","counselor":"Mr. Okonjo","planType":"Behavior plan","adminAction":"Daily lunch check-in; monitor cafeteria behavior log with supervisor.","nextReview":"Sept 30"}
+];
+
+// ---- Generic filter + pie + table engine, reused across Attendance/Academics/Behavior ----
+function initFilterableSection(prefix, data, extraColumns, options={}){
+  const dims = options.filterDims || ['grade','gender','iep','ell','race'];
+  const pieDims = options.pieDims || dims;
+  const distinct = {};
+  dims.forEach(d => { distinct[d] = [...new Set(data.map(r=>r[d]))]; });
+  if(distinct.grade) distinct.grade.sort((a,b)=> parseInt(a)-parseInt(b));
+  const state = {};
+  dims.forEach(d => state[d] = new Set(distinct[d]));
+
+  function filteredRows(){
+    return data.filter(r => dims.every(d => state[d].has(r[d])));
+  }
+
+  function renderFilters(){
+    dims.forEach(d=>{
+      const container = document.getElementById(`${prefix}-filter-${d}`);
+      const title = container.querySelector('.filter-group-title').outerHTML;
+      container.innerHTML = title + distinct[d].map(v=>
+        `<label><input type="checkbox" data-dim="${d}" value="${v.replace(/"/g,'&quot;')}" ${state[d].has(v)?'checked':''}> ${v}</label>`
+      ).join('');
+    });
+  }
+
+  function renderPies(rows){
+    pieDims.forEach(d=>{
+      const counts = {};
+      rows.forEach(r=> counts[r[d]] = (counts[r[d]]||0)+1);
+      const total = rows.length || 1;
+      const pieData = Object.entries(counts).map(([label,value],i)=>(
+        {label, value: Math.round(value/total*100), color: DEMO_COLORS[i % DEMO_COLORS.length]}
+      ));
+      const isFiltered = state[d].size < distinct[d].length;
+      renderPie(
+        `${prefix}-pie-${d}`, `${prefix}-legend-${d}`,
+        pieData.length ? pieData : [{label:'No data', value:100, color:'#DFE3E7'}],
+        pieData.length ? ((clickedValue, event)=> onSliceClick(d, clickedValue, event)) : null,
+        state[d],
+        isFiltered
+      );
+    });
+  }
+
+  function onSliceClick(dim, value, event){
+    const isModified = event && (event.ctrlKey || event.metaKey || event.shiftKey);
+    const isFullSelection = state[dim].size === distinct[dim].length;
+    if(isModified){
+      if(isFullSelection){
+        state[dim] = new Set([value]); // nothing meaningfully selected yet -> start fresh with this one
+      } else {
+        const next = new Set(state[dim]);
+        if(next.has(value)) next.delete(value); else next.add(value);
+        state[dim] = next.size ? next : new Set(distinct[dim]); // emptied out -> back to showing all
+      }
+    } else {
+      // plain click: isolate to just this slice, or clear if it's already the sole selection
+      if(state[dim].size === 1 && state[dim].has(value)){
+        state[dim] = new Set(distinct[dim]);
+      } else {
+        state[dim] = new Set([value]);
+      }
+    }
+    renderAll();
+  }
+
+  function renderTable(rows){
+    const table = document.getElementById(`${prefix}-table`);
+    let html = '<tr><th>Student</th><th>Grade</th><th>Gender</th><th>IEP</th><th>ELL</th><th>Race</th>';
+    extraColumns.forEach(c => html += `<th>${c.label}</th>`);
+    html += '</tr>';
+    rows.forEach(r=>{
+      html += `<tr><td>${r.name}</td><td>${r.grade}</td><td>${r.gender}</td><td>${r.iep}</td><td>${r.ell}</td><td>${r.race}</td>`;
+      extraColumns.forEach(c => html += `<td>${r[c.key]}</td>`);
+      html += '</tr>';
+    });
+    table.innerHTML = html;
+  }
+
+  function renderAll(){
+    renderFilters();
+    const rows = filteredRows();
+    renderPies(rows);
+    renderTable(rows);
+    const countEl = document.getElementById(`${prefix}-count`);
+    if(countEl) countEl.textContent = `${rows.length} of ${data.length} students match current filters`;
+  }
+
+  document.getElementById(`${prefix}-sidebar`).addEventListener('change', (e)=>{
+    if(e.target.matches('input[type=checkbox]')){
+      const d = e.target.dataset.dim, v = e.target.value;
+      if(e.target.checked) state[d].add(v); else state[d].delete(v);
+      const rows = filteredRows();
+      renderPies(rows);
+      renderTable(rows);
+      const countEl = document.getElementById(`${prefix}-count`);
+      if(countEl) countEl.textContent = `${rows.length} of ${data.length} students match current filters`;
+    }
+  });
+
+  document.getElementById(`${prefix}-clear`).addEventListener('click', ()=>{
+    dims.forEach(d => state[d] = new Set(distinct[d]));
+    renderAll();
+  });
+
+  renderAll();
+}
+
+initFilterableSection('att', chronicAbsData, [
+  {key:'counselor', label:'Counselor'},
+  {key:'attendance', label:'Attendance (30-day)'},
+  {key:'daysAbsent', label:'Days Absent'},
+  {key:'note', label:'Note'}
 ]);
 
-renderPie('pie-absent', 'legend-absent', [
-  {label:'Hispanic/Latino', value:46, color:DEMO_COLORS[0]},
-  {label:'White', value:32, color:DEMO_COLORS[1]},
-  {label:'Black/African American', value:14, color:DEMO_COLORS[2]},
-  {label:'Asian', value:3, color:DEMO_COLORS[3]},
-  {label:'Two or More Races', value:4, color:DEMO_COLORS[4]},
-  {label:'Amer. Indian/Alaska Native', value:1, color:DEMO_COLORS[5]},
+initFilterableSection('acad', failingData, [
+  {key:'classesFailing', label:'Classes Failing (This Week)'},
+  {key:'lastWeek', label:'Last Week'},
+  {key:'twoWeeksAgo', label:'2 Weeks Ago'}
 ]);
 
-renderPie('pie-failing-grade', 'legend-failing-grade', [
-  {label:'9th grade', value:20, color:DEMO_COLORS[0]},
-  {label:'10th grade', value:26, color:DEMO_COLORS[1]},
-  {label:'11th grade', value:24, color:DEMO_COLORS[2]},
-  {label:'12th grade', value:30, color:DEMO_COLORS[3]},
+
+const combinedOffTrackData = [
+  {"name":"Elena Fontaine","grade":"12th","gender":"Female","iep":"No","ell":"No","race":"White","counselor":"Mr. Okonjo","reason":"Credits","creditsInfo":"21 / 24 earned","detail":"Missing English credit","action":"Credit-recovery block; tutoring 2x/week with English dept.","owner":"Counselor"},
+  {"name":"Fernanda Alvez","grade":"12th","gender":"Female","iep":"No","ell":"No","race":"Asian","counselor":"Mr. Okonjo","reason":"Credits","creditsInfo":"21 / 24 earned","detail":"Missing English credit","action":"Credit-recovery block; tutoring 2x/week with English dept.","owner":"Counselor"},
+  {"name":"Pablo Nakamura","grade":"12th","gender":"Male","iep":"No","ell":"No","race":"White","counselor":"Mr. Okonjo","reason":"Credits","creditsInfo":"20 / 24 earned","detail":"Missing Social Studies credit","action":"Enroll in credit-recovery seminar; biweekly counselor check-in.","owner":"Counselor"},
+  {"name":"Harper Whitfield","grade":"12th","gender":"Female","iep":"No","ell":"No","race":"White","counselor":"Mr. Okonjo","reason":"Menu of Options","creditsInfo":"On pace","detail":"Math — No qualifying SAT/ACT Math benchmark or alternate pathway","action":"Register for next SAT/ACT window; math menu-support block.","owner":"Counselor"},
+  {"name":"Priyanka Okonkwo","grade":"12th","gender":"Female","iep":"No","ell":"No","race":"Hispanic/Latino","counselor":"Mr. Okonjo","reason":"Menu of Options","creditsInfo":"On pace","detail":"Both — No qualifying score in English or Math; no alternate pathway demonstrated","action":"Enroll in concurrent-enrollment course for spring; identify best-fit option with counselor.","owner":"Counselor"},
+  {"name":"Leo Ortiz","grade":"12th","gender":"Male","iep":"Yes","ell":"No","race":"Asian","counselor":"Mr. Okonjo","reason":"Both","creditsInfo":"22 / 24 earned","detail":"Missing Elective credit; Menu of Options — No qualifying SAT/ACT Math benchmark or alternate pathway","action":"Add elective credit-recovery block next term; monitor via counselor. Also: Register for next SAT/ACT window; math menu-support block.","owner":"Counselor + Dept. Chair"},
+  {"name":"Malik Petrov","grade":"12th","gender":"Male","iep":"No","ell":"No","race":"Hispanic/Latino","counselor":"Mr. Okonjo","reason":"Menu of Options","creditsInfo":"On pace","detail":"English — No qualifying assessment score or alternate pathway demonstrated yet","action":"English menu-support seminar; register for next test date.","owner":"Counselor"},
+  {"name":"Lily Nwosu","grade":"12th","gender":"Female","iep":"No","ell":"No","race":"Hispanic/Latino","counselor":"Mr. Okonjo","reason":"Menu of Options","creditsInfo":"On pace","detail":"English — No qualifying assessment score or alternate pathway demonstrated yet","action":"English menu-support seminar; register for next test date.","owner":"Counselor"},
+  {"name":"Priya Paulsen","grade":"12th","gender":"Female","iep":"No","ell":"No","race":"Two or More Races","counselor":"Mr. Okonjo","reason":"Credits","creditsInfo":"20 / 24 earned","detail":"Missing Elective credit","action":"Add elective credit-recovery block next term; monitor via counselor.","owner":"Counselor"},
+  {"name":"Marcus Ferreira","grade":"12th","gender":"Male","iep":"No","ell":"No","race":"White","counselor":"Mr. Okonjo","reason":"Menu of Options","creditsInfo":"On pace","detail":"English — No qualifying assessment score or alternate pathway demonstrated yet","action":"English menu-support seminar; register for next test date.","owner":"Counselor"},
+  {"name":"Desmond Bianchi","grade":"12th","gender":"Male","iep":"Yes","ell":"Yes","race":"Asian","counselor":"Mr. Okonjo","reason":"Menu of Options","creditsInfo":"On pace","detail":"Both — No qualifying score in English or Math; no alternate pathway demonstrated","action":"Enroll in concurrent-enrollment course for spring; identify best-fit option with counselor.","owner":"Counselor"},
+  {"name":"Amara Reyes","grade":"12th","gender":"Female","iep":"No","ell":"Yes","race":"Hispanic/Latino","counselor":"Mr. Okonjo","reason":"Menu of Options","creditsInfo":"On pace","detail":"Math — No qualifying SAT/ACT Math benchmark or alternate pathway","action":"Register for next SAT/ACT window; math menu-support block.","owner":"Counselor"},
+  {"name":"Priyanka Ferreira","grade":"12th","gender":"Female","iep":"Yes","ell":"No","race":"White","counselor":"Mr. Okonjo","reason":"Credits","creditsInfo":"21.5 / 24 earned","detail":"Missing Math credit","action":"Move to co-taught section; weekly progress monitoring with Math dept.","owner":"Counselor"},
+  {"name":"Marisol Okafor","grade":"12th","gender":"Female","iep":"Yes","ell":"No","race":"Hispanic/Latino","counselor":"Mr. Okonjo","reason":"Menu of Options","creditsInfo":"On pace","detail":"English — No qualifying assessment score or alternate pathway demonstrated yet","action":"English menu-support seminar; register for next test date.","owner":"Counselor"},
+  {"name":"Caleb Farouk","grade":"12th","gender":"Male","iep":"No","ell":"No","race":"Hispanic/Latino","counselor":"Mr. Okonjo","reason":"Menu of Options","creditsInfo":"On pace","detail":"Both — No qualifying score in English or Math; no alternate pathway demonstrated","action":"Enroll in concurrent-enrollment course for spring; identify best-fit option with counselor.","owner":"Counselor"},
+  {"name":"Jamal Brennan","grade":"12th","gender":"Male","iep":"No","ell":"No","race":"Black/African American","counselor":"Mr. Okonjo","reason":"Credits","creditsInfo":"20 / 24 earned","detail":"Missing Science credit","action":"Enroll in online credit-recovery course for Science; counselor tracking weekly.","owner":"Counselor + Dept. Chair"},
+  {"name":"Preston Chandrasekar","grade":"12th","gender":"Male","iep":"No","ell":"No","race":"Hispanic/Latino","counselor":"Mr. Okonjo","reason":"Menu of Options","creditsInfo":"On pace","detail":"English — No qualifying assessment score or alternate pathway demonstrated yet","action":"English menu-support seminar; register for next test date.","owner":"Counselor"},
+  {"name":"Valentina Reyes","grade":"12th","gender":"Female","iep":"No","ell":"No","race":"White","counselor":"Mr. Okonjo","reason":"Menu of Options","creditsInfo":"On pace","detail":"Both — No qualifying score in English or Math; no alternate pathway demonstrated","action":"Enroll in concurrent-enrollment course for spring; identify best-fit option with counselor.","owner":"Counselor"},
+  {"name":"Valentina Okafor","grade":"12th","gender":"Female","iep":"Yes","ell":"No","race":"White","counselor":"Mr. Okonjo","reason":"Menu of Options","creditsInfo":"On pace","detail":"Math — No qualifying SAT/ACT Math benchmark or alternate pathway","action":"Register for next SAT/ACT window; math menu-support block.","owner":"Counselor"},
+  {"name":"Nora Okonkwo","grade":"12th","gender":"Female","iep":"No","ell":"No","race":"American Indian/Alaska Native","counselor":"Mr. Okonjo","reason":"Credits","creditsInfo":"20.5 / 24 earned","detail":"Missing Elective credit","action":"Add elective credit-recovery block next term; monitor via counselor.","owner":"Counselor + Dept. Chair"},
+  {"name":"Ivan Castellano","grade":"12th","gender":"Male","iep":"No","ell":"No","race":"Hispanic/Latino","counselor":"Mr. Okonjo","reason":"Credits","creditsInfo":"21 / 24 earned","detail":"Missing Social Studies credit","action":"Enroll in credit-recovery seminar; biweekly counselor check-in.","owner":"Counselor + Dept. Chair"},
+  {"name":"Emmett Cruz","grade":"12th","gender":"Male","iep":"No","ell":"No","race":"White","counselor":"Mr. Okonjo","reason":"Menu of Options","creditsInfo":"On pace","detail":"Math — No qualifying SAT/ACT Math benchmark or alternate pathway","action":"Register for next SAT/ACT window; math menu-support block.","owner":"Counselor"},
+  {"name":"Sophie Whitcomb","grade":"12th","gender":"Female","iep":"No","ell":"No","race":"Hispanic/Latino","counselor":"Mr. Okonjo","reason":"Credits","creditsInfo":"20.5 / 24 earned","detail":"Missing Social Studies credit","action":"Enroll in credit-recovery seminar; biweekly counselor check-in.","owner":"Counselor"},
+  {"name":"Zoe Nwosu","grade":"12th","gender":"Female","iep":"No","ell":"No","race":"White","counselor":"Mr. Okonjo","reason":"Menu of Options","creditsInfo":"On pace","detail":"Both — No qualifying score in English or Math; no alternate pathway demonstrated","action":"Enroll in concurrent-enrollment course for spring; identify best-fit option with counselor.","owner":"Counselor"}
+];
+
+const atRiskData = [
+  {"name":"Bianca Michaels","grade":"12th","gender":"Female","iep":"No","ell":"No","race":"White","counselor":"Mr. Okonjo","className":"English 12","teacher":"Ms. Delacroix","currentGrade":"58%","classAttendance":"72%"},
+  {"name":"Odalys Bose","grade":"12th","gender":"Female","iep":"Yes","ell":"No","race":"Hispanic/Latino","counselor":"Mr. Okonjo","className":"Chemistry","teacher":"Dr. Whitson","currentGrade":"47%","classAttendance":"83%"},
+  {"name":"Maya Mbeki","grade":"12th","gender":"Female","iep":"No","ell":"No","race":"Hispanic/Latino","counselor":"Mr. Okonjo","className":"Anatomy & Physiology","teacher":"Ms. Ibarra","currentGrade":"57%","classAttendance":"90%"},
+  {"name":"Maya Mbeki","grade":"12th","gender":"Female","iep":"No","ell":"No","race":"Hispanic/Latino","counselor":"Mr. Okonjo","className":"Chemistry","teacher":"Dr. Whitson","currentGrade":"60%","classAttendance":"77%"},
+  {"name":"Daniela Osei","grade":"12th","gender":"Female","iep":"Yes","ell":"No","race":"White","counselor":"Mr. Okonjo","className":"Concurrent Enrollment English","teacher":"Ms. Bostwick","currentGrade":"56%","classAttendance":"76%"},
+  {"name":"Daniela Osei","grade":"12th","gender":"Female","iep":"Yes","ell":"No","race":"White","counselor":"Mr. Okonjo","className":"Personal Finance","teacher":"Mr. Bianchi","currentGrade":"55%","classAttendance":"68%"},
+  {"name":"Daniela Osei","grade":"12th","gender":"Female","iep":"Yes","ell":"No","race":"White","counselor":"Mr. Okonjo","className":"US Government","teacher":"Mr. Hartley","currentGrade":"57%","classAttendance":"85%"},
+  {"name":"Ivan Lindqvist","grade":"12th","gender":"Male","iep":"No","ell":"No","race":"Hispanic/Latino","counselor":"Mr. Okonjo","className":"Personal Finance","teacher":"Mr. Bianchi","currentGrade":"56%","classAttendance":"69%"},
+  {"name":"Ivan Lindqvist","grade":"12th","gender":"Male","iep":"No","ell":"No","race":"Hispanic/Latino","counselor":"Mr. Okonjo","className":"Anatomy & Physiology","teacher":"Ms. Ibarra","currentGrade":"62%","classAttendance":"89%"},
+  {"name":"Caleb Fielding","grade":"12th","gender":"Male","iep":"No","ell":"Yes","race":"Asian","counselor":"Mr. Okonjo","className":"Anatomy & Physiology","teacher":"Ms. Ibarra","currentGrade":"52%","classAttendance":"83%"},
+  {"name":"Oscar Andrade","grade":"12th","gender":"Male","iep":"No","ell":"Yes","race":"Hispanic/Latino","counselor":"Mr. Okonjo","className":"Spanish IV","teacher":"Ms. Reyes","currentGrade":"62%","classAttendance":"86%"},
+  {"name":"Oscar Andrade","grade":"12th","gender":"Male","iep":"No","ell":"Yes","race":"Hispanic/Latino","counselor":"Mr. Okonjo","className":"Algebra II","teacher":"Mr. Feld","currentGrade":"56%","classAttendance":"65%"},
+  {"name":"Elias Rivera","grade":"12th","gender":"Male","iep":"No","ell":"No","race":"Asian","counselor":"Mr. Okonjo","className":"Anatomy & Physiology","teacher":"Ms. Ibarra","currentGrade":"53%","classAttendance":"73%"},
+  {"name":"Elias Rivera","grade":"12th","gender":"Male","iep":"No","ell":"No","race":"Asian","counselor":"Mr. Okonjo","className":"Concurrent Enrollment English","teacher":"Ms. Bostwick","currentGrade":"48%","classAttendance":"76%"},
+  {"name":"Silas Nakamura","grade":"12th","gender":"Male","iep":"No","ell":"No","race":"White","counselor":"Mr. Okonjo","className":"Chemistry","teacher":"Dr. Whitson","currentGrade":"54%","classAttendance":"67%"},
+  {"name":"Cole Achebe","grade":"12th","gender":"Male","iep":"No","ell":"No","race":"Black/African American","counselor":"Mr. Okonjo","className":"Chemistry","teacher":"Dr. Whitson","currentGrade":"57%","classAttendance":"83%"},
+  {"name":"Cole Achebe","grade":"12th","gender":"Male","iep":"No","ell":"No","race":"Black/African American","counselor":"Mr. Okonjo","className":"Physics","teacher":"Mr. Doyle","currentGrade":"45%","classAttendance":"74%"},
+  {"name":"Cole Achebe","grade":"12th","gender":"Male","iep":"No","ell":"No","race":"Black/African American","counselor":"Mr. Okonjo","className":"English 12","teacher":"Ms. Delacroix","currentGrade":"59%","classAttendance":"68%"},
+  {"name":"Priya Boone","grade":"12th","gender":"Female","iep":"No","ell":"No","race":"Hispanic/Latino","counselor":"Mr. Okonjo","className":"Personal Finance","teacher":"Mr. Bianchi","currentGrade":"54%","classAttendance":"75%"},
+  {"name":"Priya Boone","grade":"12th","gender":"Female","iep":"No","ell":"No","race":"Hispanic/Latino","counselor":"Mr. Okonjo","className":"Chemistry","teacher":"Dr. Whitson","currentGrade":"50%","classAttendance":"90%"},
+  {"name":"Harper Paulsen","grade":"12th","gender":"Female","iep":"No","ell":"No","race":"Hispanic/Latino","counselor":"Mr. Okonjo","className":"Algebra II","teacher":"Mr. Feld","currentGrade":"62%","classAttendance":"92%"},
+  {"name":"Harper Paulsen","grade":"12th","gender":"Female","iep":"No","ell":"No","race":"Hispanic/Latino","counselor":"Mr. Okonjo","className":"Personal Finance","teacher":"Mr. Bianchi","currentGrade":"58%","classAttendance":"92%"},
+  {"name":"Harper Paulsen","grade":"12th","gender":"Female","iep":"No","ell":"No","race":"Hispanic/Latino","counselor":"Mr. Okonjo","className":"Anatomy & Physiology","teacher":"Ms. Ibarra","currentGrade":"62%","classAttendance":"74%"},
+  {"name":"Marcus Toussaint","grade":"12th","gender":"Male","iep":"No","ell":"Yes","race":"Hispanic/Latino","counselor":"Mr. Okonjo","className":"Anatomy & Physiology","teacher":"Ms. Ibarra","currentGrade":"53%","classAttendance":"72%"},
+  {"name":"Marcus Toussaint","grade":"12th","gender":"Male","iep":"No","ell":"Yes","race":"Hispanic/Latino","counselor":"Mr. Okonjo","className":"Physics","teacher":"Mr. Doyle","currentGrade":"64%","classAttendance":"87%"},
+  {"name":"Selena Feld","grade":"12th","gender":"Female","iep":"No","ell":"No","race":"White","counselor":"Mr. Okonjo","className":"Algebra II","teacher":"Mr. Feld","currentGrade":"48%","classAttendance":"68%"},
+  {"name":"Selena Feld","grade":"12th","gender":"Female","iep":"No","ell":"No","race":"White","counselor":"Mr. Okonjo","className":"Personal Finance","teacher":"Mr. Bianchi","currentGrade":"50%","classAttendance":"69%"},
+  {"name":"Selena Feld","grade":"12th","gender":"Female","iep":"No","ell":"No","race":"White","counselor":"Mr. Okonjo","className":"Anatomy & Physiology","teacher":"Ms. Ibarra","currentGrade":"55%","classAttendance":"87%"},
+  {"name":"Rafael Silva","grade":"12th","gender":"Male","iep":"No","ell":"No","race":"Hispanic/Latino","counselor":"Mr. Okonjo","className":"English 12","teacher":"Ms. Delacroix","currentGrade":"48%","classAttendance":"66%"},
+  {"name":"Stella Whitmore","grade":"12th","gender":"Female","iep":"No","ell":"No","race":"Black/African American","counselor":"Mr. Okonjo","className":"US Government","teacher":"Mr. Hartley","currentGrade":"64%","classAttendance":"67%"},
+  {"name":"Bryce Whitcomb","grade":"12th","gender":"Male","iep":"No","ell":"No","race":"White","counselor":"Mr. Okonjo","className":"Chemistry","teacher":"Dr. Whitson","currentGrade":"53%","classAttendance":"66%"},
+  {"name":"Bryce Whitcomb","grade":"12th","gender":"Male","iep":"No","ell":"No","race":"White","counselor":"Mr. Okonjo","className":"Physics","teacher":"Mr. Doyle","currentGrade":"62%","classAttendance":"74%"},
+  {"name":"Gabriela Brennan","grade":"12th","gender":"Female","iep":"No","ell":"No","race":"Asian","counselor":"Mr. Okonjo","className":"US Government","teacher":"Mr. Hartley","currentGrade":"60%","classAttendance":"79%"},
+  {"name":"Preston Whitcomb","grade":"12th","gender":"Male","iep":"No","ell":"No","race":"Hispanic/Latino","counselor":"Mr. Okonjo","className":"Concurrent Enrollment English","teacher":"Ms. Bostwick","currentGrade":"52%","classAttendance":"90%"},
+  {"name":"Preston Whitcomb","grade":"12th","gender":"Male","iep":"No","ell":"No","race":"Hispanic/Latino","counselor":"Mr. Okonjo","className":"AP Statistics","teacher":"Mr. Voss","currentGrade":"55%","classAttendance":"71%"},
+  {"name":"Jasmine Hale","grade":"12th","gender":"Female","iep":"Yes","ell":"No","race":"Asian","counselor":"Mr. Okonjo","className":"English 12","teacher":"Ms. Delacroix","currentGrade":"51%","classAttendance":"90%"},
+  {"name":"Camila Feld","grade":"12th","gender":"Female","iep":"No","ell":"No","race":"Hispanic/Latino","counselor":"Mr. Okonjo","className":"US Government","teacher":"Mr. Hartley","currentGrade":"48%","classAttendance":"84%"},
+  {"name":"Ryder Doyle","grade":"12th","gender":"Male","iep":"Yes","ell":"Yes","race":"White","counselor":"Mr. Okonjo","className":"Physics","teacher":"Mr. Doyle","currentGrade":"47%","classAttendance":"84%"},
+  {"name":"Tyler Hale","grade":"12th","gender":"Male","iep":"No","ell":"No","race":"Hispanic/Latino","counselor":"Mr. Okonjo","className":"Concurrent Enrollment English","teacher":"Ms. Bostwick","currentGrade":"51%","classAttendance":"84%"},
+  {"name":"Tyler Hale","grade":"12th","gender":"Male","iep":"No","ell":"No","race":"Hispanic/Latino","counselor":"Mr. Okonjo","className":"AP Statistics","teacher":"Mr. Voss","currentGrade":"58%","classAttendance":"78%"},
+  {"name":"Emmett Cruz","grade":"12th","gender":"Male","iep":"Yes","ell":"No","race":"White","counselor":"Mr. Okonjo","className":"Anatomy & Physiology","teacher":"Ms. Ibarra","currentGrade":"62%","classAttendance":"71%"},
+  {"name":"Emmett Cruz","grade":"12th","gender":"Male","iep":"Yes","ell":"No","race":"White","counselor":"Mr. Okonjo","className":"Algebra II","teacher":"Mr. Feld","currentGrade":"46%","classAttendance":"65%"},
+  {"name":"Jamal Whitson","grade":"12th","gender":"Male","iep":"No","ell":"Yes","race":"Hispanic/Latino","counselor":"Mr. Okonjo","className":"Algebra II","teacher":"Mr. Feld","currentGrade":"55%","classAttendance":"71%"}
+];
+
+initFilterableSection('plan', planData, [
+  {key:'planType', label:'Plan Type'},
+  {key:'adminAction', label:'Admin Action'},
+  {key:'nextReview', label:'Next Review'}
 ]);
 
-renderPie('pie-failing-iep', 'legend-failing-iep', [
-  {label:'IEP', value:22, color:DEMO_COLORS[0]},
-  {label:'No IEP', value:78, color:DEMO_COLORS[4]},
-]);
+initFilterableSection('grad', combinedOffTrackData, [
+  {key:'counselor', label:'Counselor'},
+  {key:'reason', label:'Off-Track Reason'},
+  {key:'creditsInfo', label:'Credits Earned/Needed'},
+  {key:'detail', label:'Detail'},
+  {key:'action', label:'Action'},
+  {key:'owner', label:'Owner'}
+], {pieDims:['gender','iep','ell','race']});
 
-renderPie('pie-failing-ell', 'legend-failing-ell', [
-  {label:'ELL', value:18, color:DEMO_COLORS[1]},
-  {label:'Not ELL', value:82, color:DEMO_COLORS[4]},
-]);
-
-renderPie('pie-failing-gender', 'legend-failing-gender', [
-  {label:'Male', value:58, color:DEMO_COLORS[0]},
-  {label:'Female', value:42, color:DEMO_COLORS[1]},
-]);
-
-renderPie('pie-failing-race', 'legend-failing-race', [
-  {label:'Hispanic/Latino', value:45, color:DEMO_COLORS[0]},
-  {label:'White', value:30, color:DEMO_COLORS[1]},
-  {label:'Black/African American', value:14, color:DEMO_COLORS[2]},
-  {label:'Asian', value:4, color:DEMO_COLORS[3]},
-  {label:'Two or More Races', value:5, color:DEMO_COLORS[4]},
-  {label:'Amer. Indian/Alaska Native', value:2, color:DEMO_COLORS[5]},
-]);
+initFilterableSection('risk', atRiskData, [
+  {key:'className', label:'Class'},
+  {key:'teacher', label:'Teacher'},
+  {key:'currentGrade', label:'Current Grade'},
+  {key:'classAttendance', label:'Attendance in Class'}
+], {pieDims:['gender','iep','ell','race']});
 
 </script>
+
 
 </body>
 </html>
