@@ -50,11 +50,10 @@
   }
   .masthead select option{ color:#1B2A38; }
 
-  .kpi-strip{
-    display:grid; grid-template-columns:repeat(7,1fr); gap:1px;
-    background:var(--line); border-bottom:1px solid var(--line);
+  .kpi-grid{
+    display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:24px;
   }
-  .kpi{ background:var(--surface); padding:16px 16px; display:flex; flex-direction:column; gap:4px; }
+  .kpi{ background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); padding:16px 16px; display:flex; flex-direction:column; gap:4px; }
   .kpi .label{ font-size:11.5px; color:var(--ink-soft); font-weight:500; }
   .kpi .value{ font-size:24px; font-weight:700; line-height:1; }
   .kpi .delta{ font-size:11.5px; font-weight:500; }
@@ -62,6 +61,20 @@
   .kpi .delta.watch{ color:var(--watch); }
   .kpi .delta.urgent{ color:var(--urgent); }
   .kpi.flagged .value{ color:var(--urgent); }
+
+  .pie-row{ display:flex; flex-wrap:wrap; gap:32px; align-items:flex-start; }
+  .pie-block{ display:flex; align-items:center; gap:18px; }
+  .pie{ width:130px; height:130px; border-radius:50%; flex-shrink:0; }
+  .pie-legend{ font-size:12.5px; }
+  .pie-legend .legend-row{ display:flex; align-items:center; gap:7px; margin-bottom:5px; white-space:nowrap; }
+  .pie-legend .legend-dot{ width:9px; height:9px; border-radius:50%; flex-shrink:0; }
+  .pie-legend strong{ margin-left:auto; padding-left:10px; }
+
+  .table-scroll{ overflow-x:auto; }
+  .check-table{ font-size:12.5px; }
+  .check-table th{ white-space:nowrap; }
+  .check-table td.check{ text-align:center; }
+  .check-mark{ color:var(--urgent); font-weight:700; }
 
   .tabbar{
     display:flex; gap:4px; padding:0 32px; background:var(--surface);
@@ -148,7 +161,7 @@
   .footnote{ margin-top:28px; font-size:12px; color:var(--ink-faint); border-top:1px solid var(--line); padding-top:14px; line-height:1.6; }
 
   @media (max-width:1000px){
-    .kpi-strip{ grid-template-columns:repeat(3,1fr); }
+    .kpi-grid{ grid-template-columns:repeat(2,1fr); }
     .grid-2, .grid-3{ grid-template-columns:1fr; }
     .detail-grid{ grid-template-columns:1fr; }
   }
@@ -167,44 +180,6 @@
   </div>
 </div>
 
-<div class="kpi-strip">
-  <div class="kpi">
-    <div class="label">Attendance today</div>
-    <div class="value">89.7%</div>
-    <div class="delta watch">▼ 2.3 pts vs. target</div>
-  </div>
-  <div class="kpi">
-    <div class="label">Staff coverage</div>
-    <div class="value">8 out</div>
-    <div class="delta urgent">2 periods unfilled</div>
-  </div>
-  <div class="kpi">
-    <div class="label">Behavior incidents (7-day)</div>
-    <div class="value">19</div>
-    <div class="delta watch">— flat vs. last week</div>
-  </div>
-  <div class="kpi">
-    <div class="label">Health office visits</div>
-    <div class="value">13</div>
-    <div class="delta watch">▲ above weekly avg</div>
-  </div>
-  <div class="kpi">
-    <div class="label">Enrollment</div>
-    <div class="value">1,384</div>
-    <div class="delta good">+3 this week</div>
-  </div>
-  <div class="kpi flagged">
-    <div class="label">Students needing attention</div>
-    <div class="value">14</div>
-    <div class="delta urgent">3 new since yesterday</div>
-  </div>
-  <div class="kpi flagged">
-    <div class="label">Seniors off-track to graduate</div>
-    <div class="value">5</div>
-    <div class="delta urgent">1 new since last review</div>
-  </div>
-</div>
-
 <div class="tabbar" id="tabbar">
   <button class="tab active" data-tab="overview">Overview</button>
   <button class="tab" data-tab="attendance">Attendance</button>
@@ -220,16 +195,45 @@
 
   <!-- OVERVIEW -->
   <section class="panel active" id="overview">
-    <div class="grid-2">
-      <div class="card">
-        <h3>Today at a glance</h3>
-        <div class="event-row"><div class="event-time">7:20a</div><div>Late bus notice — Routes 6 &amp; 9, approx. 10–15 min</div></div>
-        <div class="event-row"><div class="event-time">8:30a</div><div>College &amp; career fair setup, main gym</div></div>
-        <div class="event-row"><div class="event-time">9:30a</div><div>504 review meeting — Counseling Suite, Rm 2</div></div>
-        <div class="event-row"><div class="event-time">11:00a</div><div>Senior credit-check meetings begin, Counseling Suite</div></div>
-        <div class="event-row"><div class="event-time">1:15p</div><div>Fire drill, scheduled</div></div>
-        <div class="event-row"><div class="event-time">3:30p</div><div>After-school detention, Rm 118 — 6 students</div></div>
+    <div class="kpi-grid">
+      <div class="kpi">
+        <div class="label">Attendance today</div>
+        <div class="value">89.7%</div>
+        <div class="delta watch">▼ 2.3 pts vs. target</div>
       </div>
+      <div class="kpi">
+        <div class="label">Staff coverage</div>
+        <div class="value">8 out</div>
+        <div class="delta urgent">2 periods unfilled</div>
+      </div>
+      <div class="kpi">
+        <div class="label">Behavior incidents (7-day)</div>
+        <div class="value">19</div>
+        <div class="delta watch">— flat vs. last week</div>
+      </div>
+      <div class="kpi">
+        <div class="label">Health office visits</div>
+        <div class="value">13</div>
+        <div class="delta watch">▲ above weekly avg</div>
+      </div>
+      <div class="kpi">
+        <div class="label">Enrollment</div>
+        <div class="value">1,384</div>
+        <div class="delta good">+3 this week</div>
+      </div>
+      <div class="kpi flagged">
+        <div class="label">Students needing attention</div>
+        <div class="value">14</div>
+        <div class="delta urgent">3 new since yesterday</div>
+      </div>
+      <div class="kpi flagged">
+        <div class="label">Seniors off-track to graduate</div>
+        <div class="value">5</div>
+        <div class="delta urgent">1 new since last review</div>
+      </div>
+    </div>
+
+    <div class="grid-2">
       <div class="card">
         <h3>Needs-attention breakdown</h3>
         <div class="bar-row"><div class="lbl">Chronic abs.</div><div class="bar-track"><div class="bar-fill watch" style="width:60%"></div></div><div class="bar-val">5</div></div>
@@ -239,9 +243,9 @@
         <div class="bar-row"><div class="lbl">Referrals x3+</div><div class="bar-track"><div class="bar-fill urgent" style="width:20%"></div></div><div class="bar-val">1</div></div>
         <div class="bar-row"><div class="lbl">Off-track grad (12th)</div><div class="bar-track"><div class="bar-fill urgent" style="width:36%"></div></div><div class="bar-val">5</div></div>
       </div>
-    </div>
-    <div class="grid-3">
       <div class="card"><h3>Attendance trend, 4 wks</h3><div style="font-size:13px;color:var(--ink-soft);">93% → 92% → 91% → 90%<br>Seniors trending lowest of all grades.</div></div>
+    </div>
+    <div class="grid-2">
       <div class="card"><h3>Staffing snapshot</h3><div style="font-size:13px;color:var(--ink-soft);">8 teachers out · 6 subs placed · 2 gaps (2nd period Chem, 5th period US Hist) · dept. chairs covering</div></div>
       <div class="card"><h3>Safety note</h3><div style="font-size:13px;color:var(--ink-soft);">No active safety concerns. Parking lot camera 4 flagged for maintenance.</div></div>
     </div>
@@ -257,6 +261,25 @@
 
   <!-- ATTENDANCE -->
   <section class="panel" id="attendance">
+    <div class="card" style="margin-bottom:24px;">
+      <h3>Demographic breakdown — present vs. absent, today</h3>
+      <div class="pie-row">
+        <div class="pie-block">
+          <div class="pie" id="pie-present"></div>
+          <div>
+            <div style="font-size:12.5px;font-weight:600;color:var(--ink-soft);margin-bottom:6px;">Present students</div>
+            <div class="pie-legend" id="legend-present"></div>
+          </div>
+        </div>
+        <div class="pie-block">
+          <div class="pie" id="pie-absent"></div>
+          <div>
+            <div style="font-size:12.5px;font-weight:600;color:var(--ink-soft);margin-bottom:6px;">Absent students</div>
+            <div class="pie-legend" id="legend-absent"></div>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="grid-2">
       <div class="card">
         <h3>Attendance rate by grade — today</h3>
@@ -316,6 +339,49 @@
 
   <!-- ACADEMICS -->
   <section class="panel" id="academics">
+    <div class="card" style="margin-bottom:24px;">
+      <h3>Students failing 2+ classes — breakdown by grade</h3>
+      <div class="pie-row">
+        <div class="pie-block">
+          <div class="pie" id="pie-failing-grade"></div>
+          <div class="pie-legend" id="legend-failing-grade"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:24px;">
+      <h3>Students failing 2+ classes — demographic breakdown</h3>
+      <div class="pie-row">
+        <div class="pie-block">
+          <div class="pie" id="pie-failing-iep"></div>
+          <div>
+            <div style="font-size:12.5px;font-weight:600;color:var(--ink-soft);margin-bottom:6px;">IEP status</div>
+            <div class="pie-legend" id="legend-failing-iep"></div>
+          </div>
+        </div>
+        <div class="pie-block">
+          <div class="pie" id="pie-failing-ell"></div>
+          <div>
+            <div style="font-size:12.5px;font-weight:600;color:var(--ink-soft);margin-bottom:6px;">ELL status</div>
+            <div class="pie-legend" id="legend-failing-ell"></div>
+          </div>
+        </div>
+        <div class="pie-block">
+          <div class="pie" id="pie-failing-gender"></div>
+          <div>
+            <div style="font-size:12.5px;font-weight:600;color:var(--ink-soft);margin-bottom:6px;">Gender</div>
+            <div class="pie-legend" id="legend-failing-gender"></div>
+          </div>
+        </div>
+        <div class="pie-block">
+          <div class="pie" id="pie-failing-race"></div>
+          <div>
+            <div style="font-size:12.5px;font-weight:600;color:var(--ink-soft);margin-bottom:6px;">Race/ethnicity</div>
+            <div class="pie-legend" id="legend-failing-race"></div>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="grid-2">
       <div class="card">
         <h3>Students failing 2+ classes, by grade</h3>
@@ -561,20 +627,11 @@
 
   <!-- NEEDS ATTENTION -->
   <section class="panel" id="attention">
-    <div class="section-title">Students needing attention <span class="hint">Aggregated flags · role-restricted detail · click a row to expand</span></div>
+    <div class="section-title">Students needing attention <span class="hint">Aggregated flags · role-restricted detail</span></div>
 
-    <div class="filter-bar" id="filterbar">
-      <div class="chip on" data-flag="all"><span class="dot" style="background:var(--ink-soft)"></span>All (14)</div>
-      <div class="chip" data-flag="attendance"><span class="dot" style="background:var(--watch)"></span>Chronic absenteeism (5)</div>
-      <div class="chip" data-flag="grades"><span class="dot" style="background:var(--urgent)"></span>Failing 2+ classes (4)</div>
-      <div class="chip" data-flag="return"><span class="dot" style="background:var(--info)"></span>Returning from suspension (1)</div>
-      <div class="chip" data-flag="detention"><span class="dot" style="background:var(--brand)"></span>New detention (2)</div>
-      <div class="chip" data-flag="referrals"><span class="dot" style="background:var(--urgent)"></span>Multiple referrals (1)</div>
-      <div class="chip" data-flag="drop"><span class="dot" style="background:var(--watch)"></span>Grade/attendance drop (3)</div>
-      <div class="chip" data-flag="iep"><span class="dot" style="background:var(--info)"></span>IEP/504 meeting this week (3)</div>
+    <div class="card table-scroll">
+      <table class="check-table" id="attention-table"></table>
     </div>
-
-    <div class="student-list" id="studentlist"></div>
 
     <div class="footnote">
       Mockup data is entirely fictional. In production, this list should pull from SIS/behavior systems via row-level security, restricted to staff with a documented legitimate educational interest, with access logged per FERPA and Colorado student data privacy requirements.
@@ -636,37 +693,98 @@ const students = [
    detail:{'IEP/504 meeting':'Fri, 1:00 PM — Counseling Suite Rm 2', Attendance:'97%', Note:'Transition planning meeting, family confirmed attendance.'}}
 ];
 
-const listEl = document.getElementById('studentlist');
-function pillHtml(flagKey){ const f = FLAGS[flagKey]; return `<span class="pill ${f.pill}">${f.label}</span>`; }
-function render(filter){
-  listEl.innerHTML = '';
-  students.filter(s => filter==='all' || s.flags.includes(filter)).forEach(s=>{
-    const card = document.createElement('div');
-    card.className = 'student-card';
-    const detailRows = Object.entries(s.detail).filter(([k])=>k!=='Note')
-      .map(([k,v])=>`<div class="detail-item"><div class="k">${k}</div><div class="v">${v}</div></div>`).join('');
-    card.innerHTML = `
-      <div class="student-head">
-        <div class="student-id"><div><div class="name">${s.name}</div><div class="meta">${s.grade} grade · Counselor ${s.homeroom}</div></div></div>
-        <div class="student-flags">${s.flags.map(pillHtml).join('')}</div>
-        <div class="chev">&#9656;</div>
-      </div>
-      <div class="student-detail">
-        <div class="detail-grid">${detailRows}</div>
-        <div class="detail-note">${s.detail.Note ? s.detail.Note : ''}</div>
-      </div>`;
-    card.querySelector('.student-head').addEventListener('click', ()=> card.classList.toggle('open'));
-    listEl.appendChild(card);
+const listEl = document.getElementById('attention-table');
+const FLAG_ORDER = ['attendance','grades','return','detention','referrals','drop','iep'];
+const FLAG_SHORT = {
+  attendance:'Chronic Abs.', grades:'Failing 2+', return:'Return-Susp.',
+  detention:'New Detn.', referrals:'Multi. Ref.', drop:'Grade Drop', iep:'IEP/504'
+};
+function noteFor(s){ return s.detail.Note || ''; }
+function renderAttentionTable(){
+  let html = '<tr><th>Student</th><th>Grade</th><th>Counselor</th>';
+  FLAG_ORDER.forEach(f => html += `<th>${FLAG_SHORT[f]}</th>`);
+  html += '<th>Details</th></tr>';
+  students.forEach(s=>{
+    html += `<tr><td>${s.name}</td><td>${s.grade}</td><td>${s.homeroom}</td>`;
+    FLAG_ORDER.forEach(f => {
+      html += `<td class="check">${s.flags.includes(f) ? '<span class="check-mark">&#10003;</span>' : ''}</td>`;
+    });
+    html += `<td>${noteFor(s)}</td></tr>`;
   });
+  listEl.innerHTML = html;
 }
-render('all');
-document.querySelectorAll('#filterbar .chip').forEach(chip=>{
-  chip.addEventListener('click', ()=>{
-    document.querySelectorAll('#filterbar .chip').forEach(c=>c.classList.remove('on'));
-    chip.classList.add('on');
-    render(chip.dataset.flag);
-  });
-});
+renderAttentionTable();
+
+// ---- Pie chart helper ----
+function renderPie(circleId, legendId, data){
+  const total = data.reduce((s,d)=>s+d.value,0);
+  let cumulative = 0;
+  const stops = data.map(d=>{
+    const start = (cumulative/total*360).toFixed(2);
+    cumulative += d.value;
+    const end = (cumulative/total*360).toFixed(2);
+    return `${d.color} ${start}deg ${end}deg`;
+  }).join(', ');
+  const circle = document.getElementById(circleId);
+  if(circle) circle.style.background = `conic-gradient(${stops})`;
+  const legend = document.getElementById(legendId);
+  if(legend){
+    legend.innerHTML = data.map(d=>
+      `<div class="legend-row"><span class="legend-dot" style="background:${d.color}"></span>${d.label}<strong>${d.value}%</strong></div>`
+    ).join('');
+  }
+}
+
+const DEMO_COLORS = ['#1F4B5F','#B98A3E','#B4423F','#3F7D58','#3E6E8E','#8B98A5'];
+
+renderPie('pie-present', 'legend-present', [
+  {label:'Hispanic/Latino', value:41, color:DEMO_COLORS[0]},
+  {label:'White', value:39, color:DEMO_COLORS[1]},
+  {label:'Black/African American', value:10, color:DEMO_COLORS[2]},
+  {label:'Asian', value:5, color:DEMO_COLORS[3]},
+  {label:'Two or More Races', value:4, color:DEMO_COLORS[4]},
+  {label:'Amer. Indian/Alaska Native', value:1, color:DEMO_COLORS[5]},
+]);
+
+renderPie('pie-absent', 'legend-absent', [
+  {label:'Hispanic/Latino', value:46, color:DEMO_COLORS[0]},
+  {label:'White', value:32, color:DEMO_COLORS[1]},
+  {label:'Black/African American', value:14, color:DEMO_COLORS[2]},
+  {label:'Asian', value:3, color:DEMO_COLORS[3]},
+  {label:'Two or More Races', value:4, color:DEMO_COLORS[4]},
+  {label:'Amer. Indian/Alaska Native', value:1, color:DEMO_COLORS[5]},
+]);
+
+renderPie('pie-failing-grade', 'legend-failing-grade', [
+  {label:'9th grade', value:20, color:DEMO_COLORS[0]},
+  {label:'10th grade', value:26, color:DEMO_COLORS[1]},
+  {label:'11th grade', value:24, color:DEMO_COLORS[2]},
+  {label:'12th grade', value:30, color:DEMO_COLORS[3]},
+]);
+
+renderPie('pie-failing-iep', 'legend-failing-iep', [
+  {label:'IEP', value:22, color:DEMO_COLORS[0]},
+  {label:'No IEP', value:78, color:DEMO_COLORS[4]},
+]);
+
+renderPie('pie-failing-ell', 'legend-failing-ell', [
+  {label:'ELL', value:18, color:DEMO_COLORS[1]},
+  {label:'Not ELL', value:82, color:DEMO_COLORS[4]},
+]);
+
+renderPie('pie-failing-gender', 'legend-failing-gender', [
+  {label:'Male', value:58, color:DEMO_COLORS[0]},
+  {label:'Female', value:42, color:DEMO_COLORS[1]},
+]);
+
+renderPie('pie-failing-race', 'legend-failing-race', [
+  {label:'Hispanic/Latino', value:45, color:DEMO_COLORS[0]},
+  {label:'White', value:30, color:DEMO_COLORS[1]},
+  {label:'Black/African American', value:14, color:DEMO_COLORS[2]},
+  {label:'Asian', value:4, color:DEMO_COLORS[3]},
+  {label:'Two or More Races', value:5, color:DEMO_COLORS[4]},
+  {label:'Amer. Indian/Alaska Native', value:2, color:DEMO_COLORS[5]},
+]);
 
 </script>
 
